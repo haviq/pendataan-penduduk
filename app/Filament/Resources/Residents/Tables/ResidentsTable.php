@@ -2,11 +2,17 @@
 
 namespace App\Filament\Resources\Residents\Tables;
 
+use App\Models\Rt;
+use App\Models\Rw;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ResidentsTable
 {
@@ -92,7 +98,121 @@ class ResidentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('rw')
+                    ->label('RW')
+                    ->options(fn () => Rw::pluck('number', 'id'))
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (blank($data['value'] ?? null)) {
+                            return $query;
+                        }
+
+                        return $query->whereHas(
+                            'household.rt',
+                            fn (Builder $q) => $q->where('rw_id', $data['value'])
+                        );
+                    }),
+
+                SelectFilter::make('rt')
+                    ->label('RT')
+                    ->options(fn () => Rt::with('rw')->get()->mapWithKeys(
+                        fn (Rt $rt) => [$rt->id => "RT {$rt->number} / RW {$rt->rw->number}"]
+                    ))
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (blank($data['value'] ?? null)) {
+                            return $query;
+                        }
+
+                        return $query->whereHas(
+                            'household',
+                            fn (Builder $q) => $q->where('rt_id', $data['value'])
+                        );
+                    }),
+
+                SelectFilter::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'Laki-laki' => 'Laki-laki',
+                        'Perempuan' => 'Perempuan',
+                    ]),
+
+                SelectFilter::make('religion')
+                    ->label('Agama')
+                    ->options([
+                        'Islam' => 'Islam',
+                        'Kristen' => 'Kristen',
+                        'Katolik' => 'Katolik',
+                        'Hindu' => 'Hindu',
+                        'Buddha' => 'Buddha',
+                        'Konghucu' => 'Konghucu',
+                    ]),
+
+                SelectFilter::make('education')
+                    ->label('Pendidikan')
+                    ->options([
+                        'Tidak/Belum Sekolah' => 'Tidak/Belum Sekolah',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                        'D3' => 'D3',
+                        'S1' => 'S1',
+                        'S2' => 'S2',
+                        'S3' => 'S3',
+                    ]),
+
+                SelectFilter::make('marital_status')
+                    ->label('Status Kawin')
+                    ->options([
+                        'Belum Kawin' => 'Belum Kawin',
+                        'Kawin' => 'Kawin',
+                        'Cerai Hidup' => 'Cerai Hidup',
+                        'Cerai Mati' => 'Cerai Mati',
+                    ]),
+
+                SelectFilter::make('relationship_to_head')
+                    ->label('Status dalam Keluarga')
+                    ->options([
+                        'Kepala Keluarga' => 'Kepala Keluarga',
+                        'Suami' => 'Suami',
+                        'Istri' => 'Istri',
+                        'Anak' => 'Anak',
+                        'Menantu' => 'Menantu',
+                        'Cucu' => 'Cucu',
+                        'Orang Tua' => 'Orang Tua',
+                        'Famili Lain' => 'Famili Lain',
+                        'Lainnya' => 'Lainnya',
+                    ]),
+
+                SelectFilter::make('status')
+                    ->label('Status Kependudukan')
+                    ->options([
+                        'Aktif' => 'Aktif',
+                        'Pindah' => 'Pindah',
+                        'Meninggal' => 'Meninggal',
+                    ]),
+
+                Filter::make('age_range')
+                    ->label('Rentang Usia')
+                    ->schema([
+                        TextInput::make('age_from')
+                            ->label('Usia dari (tahun)')
+                            ->numeric()
+                            ->minValue(0),
+                        TextInput::make('age_to')
+                            ->label('Usia sampai (tahun)')
+                            ->numeric()
+                            ->minValue(0),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['age_from'] ?? null,
+                                fn (Builder $q, $age) => $q->whereDate('birth_date', '<=', now()->subYears($age)->format('Y-m-d'))
+                            )
+                            ->when(
+                                $data['age_to'] ?? null,
+                                fn (Builder $q, $age) => $q->whereDate('birth_date', '>=', now()->subYears((int) $age + 1)->addDay()->format('Y-m-d'))
+                            );
+                    }),
             ])
             ->recordActions([
                 EditAction::make(),
