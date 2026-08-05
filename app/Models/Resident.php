@@ -54,6 +54,25 @@ class Resident extends Model
         );
     }
 
+    protected function ageBreakdown(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->birth_date) {
+                    return null;
+                }
+
+                $diff = $this->birth_date->diff(now());
+
+                if ($diff->y > 0) {
+                    return "{$diff->y} tahun {$diff->m} bulan";
+                }
+
+                return "{$diff->m} bulan {$diff->d} hari";
+            },
+        );
+    }
+
     public function household(): BelongsTo
     {
         return $this->belongsTo(Household::class);

@@ -46,9 +46,8 @@ class ResidentsTable
                     ->label('Usia')
                     ->formatStateUsing(fn ($state) => $state !== null ? $state . ' tahun' : '-')
                     ->toggleable(),
-                TextColumn::make('age_in_days')
-                    ->label('Usia (hari)')
-                    ->formatStateUsing(fn ($state) => $state !== null ? $state . ' hari' : '-')
+                TextColumn::make('age_breakdown')
+                    ->label('Usia (Detail)')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('blood_type')
                     ->label('Golongan Darah')
