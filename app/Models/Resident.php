@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,6 +39,20 @@ class Resident extends Model
         'birth_date' => 'date',
         'status_date' => 'date',
     ];
+
+    protected function age(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->birth_date?->age,
+        );
+    }
+
+    protected function ageInDays(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->birth_date ? (int) $this->birth_date->diffInDays(now()) : null,
+        );
+    }
 
     public function household(): BelongsTo
     {

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Residents\Tables;
 
 use App\Models\Rt;
 use App\Models\Rw;
+use App\Models\Resident;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -41,6 +42,14 @@ class ResidentsTable
                     ->label('Tanggal Lahir')
                     ->date('d M Y')
                     ->sortable(),
+                TextColumn::make('age')
+                    ->label('Usia')
+                    ->formatStateUsing(fn ($state) => $state !== null ? $state . ' tahun' : '-')
+                    ->toggleable(),
+                TextColumn::make('age_in_days')
+                    ->label('Usia (hari)')
+                    ->formatStateUsing(fn ($state) => $state !== null ? $state . ' hari' : '-')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('blood_type')
                     ->label('Golongan Darah')
                     ->toggleable(),
@@ -211,6 +220,43 @@ class ResidentsTable
                             ->when(
                                 $data['age_to'] ?? null,
                                 fn (Builder $q, $age) => $q->whereDate('birth_date', '>=', now()->subYears((int) $age + 1)->addDay()->format('Y-m-d'))
+                            );
+                    }),
+                SelectFilter::make('birth_year')
+                    ->label('Tahun Lahir')
+                    ->options(fn () => Resident::selectRaw('YEAR(birth_date) as year')
+                        ->distinct()
+                        ->orderByDesc('year')
+                        ->pluck('year', 'year'))
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (blank($data['value'] ?? null)) {
+                            return $query;
+                        }
+
+                        return $query->whereYear('birth_date', $data['value']);
+                    }),
+
+                Filter::make('age_days_range')
+                    ->label('Usia dalam Hari (Balita)')
+                    ->schema([
+                        TextInput::make('age_days_from')
+                            ->label('Usia dari (hari)')
+                            ->numeric()
+                            ->minValue(0),
+                        TextInput::make('age_days_to')
+                            ->label('Usia sampai (hari)')
+                            ->numeric()
+                            ->minValue(0),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['age_days_from'] ?? null,
+                                fn (Builder $q, $days) => $q->whereDate('birth_date', '<=', now()->subDays($days)->format('Y-m-d'))
+                            )
+                            ->when(
+                                $data['age_days_to'] ?? null,
+                                fn (Builder $q, $days) => $q->whereDate('birth_date', '>=', now()->subDays($days)->format('Y-m-d'))
                             );
                     }),
             ])
