@@ -22,6 +22,9 @@ class HouseholdForm
                 TextInput::make('no_kk')
                     ->label('Nomor KK')
                     ->required(),
+                TextInput::make('pln_customer_number')
+                    ->label('ID Pelanggan PLN')
+                    ->default(null),
                 Textarea::make('address')
                     ->label('Alamat')
                     ->required()

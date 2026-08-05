@@ -6,6 +6,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class ResidentForm
@@ -115,6 +116,12 @@ class ResidentForm
                 TextInput::make('birth_cert_number')
                     ->label('Nomor Akta Lahir')
                     ->default(null),
+                TextInput::make('birth_cert_issuer')
+                    ->label('Kabupaten/Kota Penerbit Akta')
+                    ->default(null),
+                Toggle::make('has_ktp')
+                    ->label('Sudah Punya KTP')
+                    ->default(false),
                 Select::make('status')
                     ->label('Status Kependudukan')
                     ->options([

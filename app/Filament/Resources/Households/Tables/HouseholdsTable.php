@@ -17,6 +17,10 @@ class HouseholdsTable
                 TextColumn::make('no_kk')
                     ->label('Nomor KK')
                     ->searchable(),
+                TextColumn::make('pln_customer_number')
+                    ->label('ID PLN')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('rt.number')
                     ->label('RT')
                     ->searchable()
