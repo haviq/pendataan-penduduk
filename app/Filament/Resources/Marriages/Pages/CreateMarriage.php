@@ -18,4 +18,9 @@ class CreateMarriage extends CreateRecord
     {
         return parent::getCreateAnotherFormAction()->label('Simpan & buat lainnya');
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

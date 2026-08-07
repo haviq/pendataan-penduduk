@@ -10,12 +10,17 @@ class CreateRw extends CreateRecord
     protected static string $resource = RwResource::class;
 
     protected function getCreateFormAction(): \Filament\Actions\Action
-{
-    return parent::getCreateFormAction()->label('Simpan');
-}
+    {
+        return parent::getCreateFormAction()->label('Simpan');
+    }
 
     protected function getCreateAnotherFormAction(): \Filament\Actions\Action
-{
-    return parent::getCreateAnotherFormAction()->label('Simpan & buat lainnya');
-}
+    {
+        return parent::getCreateAnotherFormAction()->label('Simpan & buat lainnya');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
