@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
 
 class ResidentForm
 {
@@ -130,11 +131,16 @@ class ResidentForm
                         'Meninggal' => 'Meninggal',
                     ])
                     ->default('Aktif')
-                    ->required(),
+                    ->required()
+                    ->live(),
                 DatePicker::make('status_date')
-                    ->label('Tanggal Pindah/Meninggal'),
+                    ->label('Tanggal Pindah/Meninggal')
+                    ->disabled(fn (Get $get) => $get('status') == 'Aktif')
+                    ->dehydrated(fn (Get $get) => $get('status') != 'Aktif'),
                 Textarea::make('status_note')
                     ->label('Keterangan')
+                    ->disabled(fn (Get $get) => $get('status') == 'Aktif')
+                    ->dehydrated(fn (Get $get) => $get('status') != 'Aktif')
                     ->default(null)
                     ->columnSpanFull(),
             ]);
