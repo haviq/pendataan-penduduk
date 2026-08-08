@@ -13,7 +13,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Table;;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class ResidentsTable
@@ -114,6 +114,11 @@ class ResidentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->striped()
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->orderBy('household_id')
+                ->orderByRaw("relationship_to_head = 'Kepala Keluarga' DESC"))
+            ->paginated([10, 25, 50, 'all'])
+            ->defaultPaginationPageOption(25)
             ->filters([
                 SelectFilter::make('rw')
                     ->label('RW')
