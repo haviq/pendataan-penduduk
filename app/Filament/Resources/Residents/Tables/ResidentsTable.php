@@ -104,7 +104,7 @@ class ResidentsTable
                 TextColumn::make('status_date')
                     ->label('Tanggal Pindah/Meninggal')
                     ->date('d M Y')
-                    ->default('-')
+                    ->placeholder('-')
                     ->toggleable(),
                 TextColumn::make('status_note')
                     ->label('Keterangan')
