@@ -20,6 +20,7 @@ class HouseholdsTable
                 TextColumn::make('pln_customer_number')
                     ->label('ID PLN')
                     ->searchable()
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('rt.number')
                     ->label('RT')

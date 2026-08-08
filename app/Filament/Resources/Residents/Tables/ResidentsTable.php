@@ -38,6 +38,7 @@ class ResidentsTable
                 TextColumn::make('birth_place')
                     ->label('Tempat Lahir')
                     ->searchable()
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('birth_date')
                     ->label('Tanggal Lahir')
@@ -52,6 +53,7 @@ class ResidentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('blood_type')
                     ->label('Golongan Darah')
+                    ->placeholder('Belum Diketahui')
                     ->toggleable(),
                 TextColumn::make('religion')
                     ->label('Agama')
@@ -62,6 +64,7 @@ class ResidentsTable
                 TextColumn::make('occupation')
                     ->label('Pekerjaan')
                     ->searchable()
+                    ->placeholder('Tidak/Belum Bekerja')
                     ->toggleable(),
                 TextColumn::make('marital_status')
                     ->label('Status Kawin')
@@ -71,15 +74,19 @@ class ResidentsTable
                     ->searchable(),
                 TextColumn::make('father_name')
                     ->label('Nama Ayah')
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('mother_name')
                     ->label('Nama Ibu')
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('birth_cert_number')
                     ->label('No. Akta Lahir')
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('birth_cert_issuer')
                     ->label('Penerbit Akta')
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 IconColumn::make('has_ktp')
                     ->label('KTP')
@@ -97,10 +104,12 @@ class ResidentsTable
                 TextColumn::make('status_date')
                     ->label('Tanggal Pindah/Meninggal')
                     ->date('d M Y')
+                    ->default('-')
                     ->toggleable(),
                 TextColumn::make('status_note')
                     ->label('Keterangan')
                     ->limit(20)
+                    ->placeholder('Belum Diisi')
                     ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
