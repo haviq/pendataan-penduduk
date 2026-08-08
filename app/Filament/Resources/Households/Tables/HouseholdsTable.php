@@ -50,6 +50,7 @@ class HouseholdsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->striped()
             ->filters([
                 //
             ])

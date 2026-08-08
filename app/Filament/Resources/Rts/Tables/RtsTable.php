@@ -40,6 +40,7 @@ class RtsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->striped()
             ->filters([
                 //
             ])

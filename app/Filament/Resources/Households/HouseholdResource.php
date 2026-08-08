@@ -18,7 +18,7 @@ class HouseholdResource extends Resource
 {
     protected static ?string $model = Household::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;
 
     protected static ?string $recordTitleAttribute = 'no_kk';
 
@@ -44,6 +44,11 @@ class HouseholdResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Household::count();
     }
 
     public static function getPages(): array

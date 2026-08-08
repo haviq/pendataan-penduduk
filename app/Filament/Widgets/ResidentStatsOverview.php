@@ -11,6 +11,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ResidentStatsOverview extends StatsOverviewWidget
 {
+    protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
         $totalAktif = Resident::where('status', 'Aktif')->count();
@@ -19,20 +21,21 @@ class ResidentStatsOverview extends StatsOverviewWidget
 
         return [
             Stat::make('Total RW', Rw::count())
-                ->icon('heroicon-o-rectangle-stack'),
+                ->icon('heroicon-o-map')
+                ->color('info'),
 
             Stat::make('Total RT', Rt::count())
-                ->icon('heroicon-o-rectangle-stack'),
+                ->icon('heroicon-o-home-modern')
+                ->color('warning'),
 
-            Stat::make('Total Kartu Keluarga', Household::count())
-                ->icon('heroicon-o-home'),
+            Stat::make('Total KK', Household::count())
+                ->icon('heroicon-o-home')
+                ->color('primary'),
 
             Stat::make('Total Warga', Resident::count())
-                ->description("Aktif: {$totalAktif} · Pindah: {$totalPindah} · Meninggal: {$totalMeninggal}")
+                ->description("Aktif: {$totalAktif} - Pindah: {$totalPindah} - Meninggal: {$totalMeninggal}")
                 ->icon('heroicon-o-users')
                 ->color('success'),
         ];
     }
-
-    protected static ?int $sort = 1;
 }

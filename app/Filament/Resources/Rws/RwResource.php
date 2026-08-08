@@ -18,7 +18,7 @@ class RwResource extends Resource
 {
     protected static ?string $model = Rw::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMap;
 
     protected static ?string $recordTitleAttribute = 'number';
 
@@ -44,6 +44,11 @@ class RwResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Rw::count();
     }
 
     public static function getPages(): array

@@ -18,7 +18,7 @@ class MarriageResource extends Resource
 {
     protected static ?string $model = Marriage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
     protected static ?string $recordTitleAttribute = 'marriage_certificate_number';
 
@@ -44,6 +44,11 @@ class MarriageResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Marriage::count();
     }
 
     public static function getPages(): array

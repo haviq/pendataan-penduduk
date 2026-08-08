@@ -233,8 +233,7 @@ return [
         'subject' => 'class',
         'prefix' => 'view',
         'exclude' => [
-            AccountWidget::class,
-            FilamentInfoWidget::class,
+            //
         ],
     ],
 

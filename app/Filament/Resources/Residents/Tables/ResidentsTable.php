@@ -113,6 +113,7 @@ class ResidentsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->striped()
             ->filters([
                 SelectFilter::make('rw')
                     ->label('RW')

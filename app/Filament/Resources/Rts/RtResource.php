@@ -18,7 +18,7 @@ class RtResource extends Resource
 {
     protected static ?string $model = Rt::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHomeModern;
 
     protected static ?string $recordTitleAttribute = 'number';
 
@@ -44,6 +44,11 @@ class RtResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Rt::count();
     }
 
     public static function getPages(): array

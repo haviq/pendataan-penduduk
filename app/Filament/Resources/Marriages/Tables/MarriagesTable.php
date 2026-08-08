@@ -52,6 +52,7 @@ class MarriagesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->striped()
             ->filters([
                 //
             ])

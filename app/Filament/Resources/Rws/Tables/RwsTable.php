@@ -36,6 +36,7 @@ class RwsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->striped()
             ->filters([
                 //
             ])
