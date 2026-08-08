@@ -11,7 +11,7 @@ class AgeGroupChart extends ChartWidget
 
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = 1;
+    protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array
     {
