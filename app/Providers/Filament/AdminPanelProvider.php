@@ -13,6 +13,7 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -33,6 +34,15 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Emerald,
             ])
             ->brandName('SIDUKUH Gondang')
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => '<style>
+                .fi-dropdown-panel {
+                    max-height: 24rem;
+                    overflow-y: auto;
+                }
+                </style>'
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
