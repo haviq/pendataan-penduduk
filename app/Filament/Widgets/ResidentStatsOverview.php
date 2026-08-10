@@ -19,6 +19,13 @@ class ResidentStatsOverview extends StatsOverviewWidget
         $totalPindah = Resident::where('status', 'Pindah')->count();
         $totalMeninggal = Resident::where('status', 'Meninggal')->count();
 
+        $totalPemilih = Resident::where('status', 'Aktif')
+            ->where(function ($query) {
+                $query->whereDate('birth_date', '<=', now()->subYears(17)->format('Y-m-d'))
+                    ->orWhere('marital_status', '!=', 'Belum Kawin');
+            })
+            ->count();
+
         return [
             Stat::make('Total RW', Rw::count())
                 ->icon('heroicon-o-map')
@@ -36,6 +43,11 @@ class ResidentStatsOverview extends StatsOverviewWidget
                 ->description("Aktif: {$totalAktif} - Pindah: {$totalPindah} - Meninggal: {$totalMeninggal}")
                 ->icon('heroicon-o-users')
                 ->color('success'),
+
+            Stat::make('Pemilih Potensial', $totalPemilih)
+                ->description('Usia 17+ atau sudah/pernah kawin')
+                ->icon('heroicon-o-identification')
+                ->color('primary'),
         ];
     }
 }

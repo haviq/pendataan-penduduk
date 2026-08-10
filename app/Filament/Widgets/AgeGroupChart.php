@@ -16,8 +16,9 @@ class AgeGroupChart extends ChartWidget
     protected function getData(): array
     {
         $groups = [
-            'Balita (0-5)' => [0, 5],
-            'Anak (6-12)' => [6, 12],
+            'Bayi (<1)' => [0, 0],
+            'Balita (1-4)' => [1, 4],
+            'Anak (5-12)' => [5, 12],
             'Remaja (13-17)' => [13, 17],
             'Dewasa (18-59)' => [18, 59],
             'Lansia (60+)' => [60, 150],
