@@ -7,6 +7,8 @@ use App\Filament\Resources\Residents\Pages\EditResident;
 use App\Filament\Resources\Residents\Pages\ListResidents;
 use App\Filament\Resources\Residents\Schemas\ResidentForm;
 use App\Filament\Resources\Residents\Tables\ResidentsTable;
+use App\Filament\Resources\Residents\Pages\ViewResident;
+use App\Filament\Resources\Residents\Schemas\ResidentInfolist;
 use App\Models\Resident;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -39,6 +41,11 @@ class ResidentResource extends Resource
         return ResidentsTable::configure($table);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return ResidentInfolist::configure($schema);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -61,6 +68,7 @@ class ResidentResource extends Resource
         return [
             'index' => ListResidents::route('/'),
             'create' => CreateResident::route('/create'),
+            'view' => ViewResident::route('/{record}'),
             'edit' => EditResident::route('/{record}/edit'),
         ];
     }
