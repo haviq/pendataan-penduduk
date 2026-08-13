@@ -84,18 +84,21 @@ class SuratResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
+                // Cetak via form POST terpisah (bukan GET) agar CSRF token
+                // tidak bocor di URL/log. Form di-submit via JS hidden form.
                 Tables\Actions\Action::make('cetak')
                     ->label('Cetak PDF')
                     ->icon(Heroicon::OutlinedArrowDownTray)
                     ->color('success')
-                    ->url(fn (Surat $record) => route('surat.generate') . '?' . http_build_query([
-                        'resident_id' => $record->resident_id,
-                        'jenis_surat' => $record->jenis_surat,
-                        'nomor_surat' => $record->nomor_surat,
-                        'keperluan'   => $record->keperluan,
-                        '_token'      => csrf_token(),
-                    ]))
-                    ->openUrlInNewTab(),
+                    ->action(function (Surat $record) {
+                        // Redirect ke halaman surat index dengan data pre-filled
+                        return redirect()->route('surat.index', [
+                            'prefill_resident' => $record->resident_id,
+                            'prefill_jenis'    => $record->jenis_surat,
+                            'prefill_nomor'    => $record->nomor_surat,
+                            'prefill_keperluan'=> $record->keperluan,
+                        ]);
+                    }),
             ]);
     }
 
