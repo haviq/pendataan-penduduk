@@ -50,34 +50,47 @@ class AdminPanelProvider extends PanelProvider
 }
 .fi-sidebar-nav { padding: 8px !important; }
 
-/* sidebar item */
+/* sidebar item — semua selector Filament v5 */
+.fi-sidebar-item-button,
+.fi-sidebar-item-button *,
+.fi-sidebar-nav-item a,
+.fi-sidebar-nav-item button,
+[data-sidebar-item],
+.fi-nav-item a,
+.fi-nav-item button {
+    color: #111827 !important;
+    font-weight: 600 !important;
+    font-size: .82rem !important;
+}
 .fi-sidebar-item-button {
     border-radius: 8px !important;
-    font-size: .82rem !important;
-    font-weight: 600 !important;
-    color: #1f2937 !important;
-    transition: background .15s, color .15s !important;
+    transition: background .15s !important;
 }
-.fi-sidebar-item-button:hover {
+.fi-sidebar-item-button:hover,
+.fi-sidebar-nav-item a:hover,
+.fi-sidebar-nav-item button:hover {
     background: #f3f4f6 !important;
     color: #111827 !important;
 }
 .fi-sidebar-item-button.fi-active,
-.fi-sidebar-item-button[aria-current] {
+.fi-sidebar-item-button[aria-current],
+.fi-sidebar-item-button[data-active="true"] {
     background: #eff6ff !important;
     color: #2563eb !important;
     font-weight: 700 !important;
 }
-/* icon & label di dalam sidebar item */
-.fi-sidebar-item-button span,
-.fi-sidebar-item-button svg {
-    color: inherit !important;
+.fi-sidebar-item-button.fi-active *,
+.fi-sidebar-item-button[aria-current] * {
+    color: #2563eb !important;
 }
-/* sub-item / nested nav */
-.fi-sidebar-nav-item .fi-sidebar-item-label,
-.fi-sidebar-group-items .fi-sidebar-item-button {
-    color: #1f2937 !important;
+/* label text khusus */
+.fi-sidebar-item-label {
+    color: #111827 !important;
     font-weight: 600 !important;
+}
+/* group label */
+.fi-sidebar-group-label {
+    color: #6b7280 !important;
 }
 
 /* sidebar group label */
