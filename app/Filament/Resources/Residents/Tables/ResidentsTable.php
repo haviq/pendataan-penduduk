@@ -255,19 +255,20 @@ class ResidentsTable
                                 )
                             );
                     }),
-                SelectFilter::make('birth_year')
-                    ->label('Tahun Lahir')
-                    ->options(fn () => Resident::selectRaw('YEAR(birth_date) as year')
-                        ->distinct()
-                        ->orderByDesc('year')
-                        ->pluck('year', 'year'))
-                    ->query(function (Builder $query, array $data): Builder {
-                        if (blank($data['value'] ?? null)) {
-                            return $query;
-                        }
+                
+SelectFilter::make('birth_year')
+    ->label('Tahun Lahir')
+    ->options(fn () => Resident::selectRaw("strftime('%Y', birth_date) as year")
+        ->distinct()
+        ->orderByDesc('year')
+        ->pluck('year', 'year'))
+    ->query(function (Builder $query, array $data): Builder {
+        if (blank($data['value'] ?? null)) {
+            return $query;
+        }
 
-                        return $query->whereYear('birth_date', $data['value']);
-                    }),
+        return $query->whereYear('birth_date', $data['value']);
+    }),
             ])
             ->recordActions([
                 ViewAction::make(),
