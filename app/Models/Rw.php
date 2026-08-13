@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Rw extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'rws';
 
@@ -17,6 +19,20 @@ class Rw extends Model
         'number',
         'chairman_resident_id',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['number'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'RW ditambahkan: RW ' . $this->number,
+                'updated' => 'RW diubah: RW ' . $this->number,
+                'deleted' => 'RW dihapus: RW ' . $this->number,
+                default   => "RW {$eventName}: RW " . $this->number,
+            });
+    }
 
     public function rts(): HasMany
     {

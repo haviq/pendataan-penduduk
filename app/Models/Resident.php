@@ -6,10 +6,26 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Resident extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['nik', 'full_name', 'gender', 'birth_date', 'status'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created'  => 'Warga ditambahkan: ' . $this->full_name,
+                'updated'  => 'Warga diubah: ' . $this->full_name,
+                'deleted'  => 'Warga dihapus: ' . $this->full_name,
+                default    => "Warga {$eventName}: " . $this->full_name,
+            });
+    }
 
     protected $table = 'residents';
 

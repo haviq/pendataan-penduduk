@@ -434,7 +434,98 @@ class AdminPanelProvider extends PanelProvider
     border-radius: 12px !important;
     box-shadow: 0 1px 2px rgba(0,0,0,.04) !important;
 }
+
+/* ── BONE LOADER (admin) ── */
+.fi-bone-loader {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #f9fafb;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .4s ease, visibility .4s ease;
+}
+.fi-bone-loader.bl-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.bl-inner { width: min(300px, 80vw); text-align: center; }
+.bl-logo {
+    width: 48px; height: 48px; margin: 0 auto 20px;
+    background: #2563eb; border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; box-shadow: 0 8px 24px rgba(37,99,235,.35);
+    animation: bl-pulse 1.4s ease-in-out infinite;
+}
+.bl-logo svg { width: 24px; height: 24px; }
+@keyframes bl-pulse {
+    0%,100% { transform: scale(1); box-shadow: 0 8px 24px rgba(37,99,235,.35); }
+    50%     { transform: scale(1.06); box-shadow: 0 12px 32px rgba(37,99,235,.5); }
+}
+.bl-skeleton { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+.bl-bar {
+    height: 11px; border-radius: 7px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: bl-shimmer 1.3s ease-in-out infinite;
+    position: relative; overflow: hidden;
+}
+.bl-bar::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 60px;
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,.25), transparent);
+    animation: bl-sweep 1.3s ease-in-out infinite;
+}
+@keyframes bl-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes bl-sweep { 0% { left: -60px; } 100% { left: 110%; } }
+.bl-bar-lg { width: 100%; height: 13px; }
+.bl-bar-md { width: 82%; }
+.bl-bar-sm { width: 64%; height: 9px; }
+.bl-bar-xs { width: 48%; height: 9px; }
+.bl-label {
+    font-size: .8rem; font-weight: 500; color: #6b7280;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.bl-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #3b82f6; animation: bl-dot 1s ease-in-out infinite;
+}
+@keyframes bl-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%     { opacity: .35; transform: scale(.7); }
+}
+.dark .fi-bone-loader { background: #0f172a !important; }
+.dark .bl-bar {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+}
+.dark .bl-bar::after { background: linear-gradient(90deg, transparent, rgba(59,130,246,.35), transparent); }
+.dark .bl-label { color: #94a3b8 !important; }
 </style>
+
+<!-- BONE LOADER OVERLAY -->
+<div class="fi-bone-loader" id="fi-bone-loader">
+  <div class="bl-inner">
+    <div class="bl-logo">
+      <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 1L1 5v10h14V5z"/><path d="M5 15V9h6v6"/>
+      </svg>
+    </div>
+    <div class="bl-skeleton">
+      <div class="bl-bar bl-bar-lg"></div>
+      <div class="bl-bar bl-bar-md"></div>
+      <div class="bl-bar bl-bar-sm"></div>
+      <div class="bl-bar bl-bar-xs"></div>
+    </div>
+    <p class="bl-label"><span class="bl-dot"></span>Memuat panel...</p>
+  </div>
+</div>
+<script>
+(function () {
+  var el = document.getElementById("fi-bone-loader");
+  if (!el) return;
+  var hide = function () { el.classList.add("bl-hidden"); };
+  if (document.readyState === "complete") { setTimeout(hide, 800); }
+  else { window.addEventListener("load", function () { setTimeout(hide, 800); }); }
+  // Livewire navigation — hide saat sudah selesai
+  document.addEventListener("livewire:navigated", function () { setTimeout(hide, 300); });
+  // Fallback safety: max 4 detik
+  setTimeout(hide, 4000);
+})();
+</script>
 '
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

@@ -332,6 +332,8 @@ tbody tr:hover td { background: var(--gray-50); }
 </head>
 <body>
 
+<x-bone-loader label="Memuat data kependudukan..." />
+
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">

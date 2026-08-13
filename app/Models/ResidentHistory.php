@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class ResidentHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'resident_histories';
 
@@ -25,6 +27,20 @@ class ResidentHistory extends Model
     protected $casts = [
         'tanggal_perubahan' => 'date',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['jenis_perubahan', 'tanggal_perubahan'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Riwayat ditambahkan: ' . $this->jenis_label . ' — ' . ($this->resident?->full_name ?? '-'),
+                'updated' => 'Riwayat diubah: ' . $this->jenis_label,
+                'deleted' => 'Riwayat dihapus: ' . $this->jenis_label,
+                default   => "Riwayat {$eventName}",
+            });
+    }
 
     public function resident(): BelongsTo
     {
