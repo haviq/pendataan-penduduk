@@ -48,37 +48,98 @@ class AdminPanelProvider extends PanelProvider
     background: #ffffff !important;
     border-right: 1px solid #e5e7eb !important;
 }
-/* ── SIDEBAR — dark ── */
+/* ── SIDEBAR — dark (Filament v5 pakai data-theme="dark") ── */
+[data-theme="dark"] .fi-sidebar,
 .dark .fi-sidebar {
     background: #111827 !important;
     border-right: 1px solid #1f2937 !important;
 }
+[data-theme="dark"] .fi-sidebar-header,
 .dark .fi-sidebar-header {
     background: #111827 !important;
     border-bottom: 1px solid #1f2937 !important;
 }
+[data-theme="dark"] .fi-brand-name,
 .dark .fi-brand-name { color: #f9fafb !important; }
+
+[data-theme="dark"] .fi-sidebar-item-button,
+[data-theme="dark"] .fi-sidebar-item-button *,
+[data-theme="dark"] .fi-sidebar-nav-item a,
+[data-theme="dark"] .fi-sidebar-nav-item button,
+[data-theme="dark"] .fi-sidebar-item-label,
 .dark .fi-sidebar-item-button,
 .dark .fi-sidebar-item-button *,
-.dark .fi-sidebar-nav-item a,
-.dark .fi-sidebar-nav-item button,
 .dark .fi-sidebar-item-label {
     color: #e5e7eb !important;
 }
-.dark .fi-sidebar-item-button:hover,
-.dark .fi-sidebar-nav-item a:hover,
-.dark .fi-sidebar-nav-item button:hover {
+[data-theme="dark"] .fi-sidebar-item-button:hover,
+[data-theme="dark"] .fi-sidebar-nav-item a:hover,
+[data-theme="dark"] .fi-sidebar-nav-item button:hover,
+.dark .fi-sidebar-item-button:hover {
     background: #1f2937 !important;
     color: #f9fafb !important;
 }
+[data-theme="dark"] .fi-sidebar-item-button.fi-active,
+[data-theme="dark"] .fi-sidebar-item-button[aria-current],
 .dark .fi-sidebar-item-button.fi-active,
 .dark .fi-sidebar-item-button[aria-current] {
     background: rgba(59,130,246,0.15) !important;
     color: #93c5fd !important;
 }
+[data-theme="dark"] .fi-sidebar-item-button.fi-active *,
+[data-theme="dark"] .fi-sidebar-item-button[aria-current] *,
 .dark .fi-sidebar-item-button.fi-active *,
 .dark .fi-sidebar-item-button[aria-current] * { color: #93c5fd !important; }
+[data-theme="dark"] .fi-sidebar-group-label,
 .dark .fi-sidebar-group-label { color: #6b7280 !important; }
+
+/* ── TOPBAR dark ── */
+[data-theme="dark"] .fi-topbar,
+.dark .fi-topbar {
+    background: rgba(17,24,39,.92) !important;
+    border-bottom: 1px solid #1f2937 !important;
+}
+
+/* ── MAIN dark ── */
+[data-theme="dark"] .fi-main,
+.dark .fi-main { background: #0f172a !important; }
+
+/* ── CARDS dark ── */
+[data-theme="dark"] .fi-wi-stats-overview-stat,
+[data-theme="dark"] .fi-wi,
+[data-theme="dark"] .fi-card,
+[data-theme="dark"] .fi-section,
+.dark .fi-wi-stats-overview-stat,
+.dark .fi-card,
+.dark .fi-section {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* ── TABLE dark ── */
+[data-theme="dark"] .fi-ta-cell,
+.dark .fi-ta-cell { border-color: #1e293b !important; }
+[data-theme="dark"] .fi-ta-row:hover .fi-ta-cell,
+.dark .fi-ta-row:hover .fi-ta-cell { background: #1e293b !important; }
+
+/* ── INPUTS dark ── */
+[data-theme="dark"] .fi-input,
+[data-theme="dark"] .fi-select-input,
+.dark .fi-input,
+.dark .fi-select-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+/* ── DROPDOWN dark ── */
+[data-theme="dark"] .fi-dropdown-panel,
+.dark .fi-dropdown-panel {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+[data-theme="dark"] .fi-dropdown-list-item-label,
+.dark .fi-dropdown-list-item-label { color: #e2e8f0 !important; }
 .fi-sidebar-nav { padding: 8px !important; }
 
 /* sidebar item — semua selector Filament v5 */
