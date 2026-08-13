@@ -4,385 +4,850 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal Kependudukan</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#080d1a;
-  --surface:#0f1629;
-  --surface2:#151e35;
-  --border:#1e2d4a;
-  --text:#f1f5f9;
-  --muted:#64748b;
-  --blue:#3b82f6;
-  --blue2:#1d4ed8;
-  --green:#22c55e;
-  --rose:#f43f5e;
-  --amber:#f59e0b;
-  --purple:#a78bfa;
-  --cyan:#06b6d4;
+:root {
+  --bg: #020b18;
+  --bg2: #040f1e;
+  --surface: #071428;
+  --surface2: #0a1a30;
+  --border: #0d2240;
+  --border2: #1a3a5c;
+  --text: #e8f4fd;
+  --muted: #4d7a9e;
+  --muted2: #3a6080;
+  --blue: #1E40AF;
+  --blue-light: #3b82f6;
+  --blue-bright: #60a5fa;
+  --green: #16A34A;
+  --green-light: #22c55e;
+  --amber: #d97706;
+  --amber-light: #f59e0b;
+  --rose: #be123c;
+  --rose-light: #f43f5e;
+  --cyan: #0e7490;
+  --cyan-light: #06b6d4;
+  --purple: #6d28d9;
+  --purple-light: #a78bfa;
+  --glow-blue: rgba(59,130,246,0.12);
+  --glow-green: rgba(34,197,94,0.1);
 }
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Fira Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* SCANLINES OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* GRID BG */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(30,64,175,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,64,175,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(2,11,24,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fira Code', monospace;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--blue-bright);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+.nav-brand-icon {
+  width: 28px; height: 28px;
+  border: 1px solid var(--blue-light);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59,130,246,0.08);
+}
+.nav-brand-icon svg { width: 14px; height: 14px; }
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Fira Code', monospace;
+  font-size: .68rem;
+  color: var(--muted);
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green-light);
+  box-shadow: 0 0 8px var(--green-light);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+.nav-admin {
+  font-family: 'Fira Code', monospace;
+  font-size: .72rem;
+  color: var(--blue-bright);
+  text-decoration: none;
+  border: 1px solid rgba(59,130,246,0.3);
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: rgba(59,130,246,0.06);
+  transition: all .2s;
+  cursor: pointer;
+}
+.nav-admin:hover {
+  background: rgba(59,130,246,0.12);
+  border-color: var(--blue-light);
+  box-shadow: 0 0 12px rgba(59,130,246,0.15);
+}
 
 /* HERO */
-.hero{
-  position:relative;padding:80px 24px 64px;text-align:center;overflow:hidden;
-  background:linear-gradient(180deg,#0b1328 0%,var(--bg) 100%);
+.hero {
+  position: relative;
+  padding: 120px 24px 80px;
+  text-align: center;
+  z-index: 1;
+  overflow: hidden;
 }
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 50% -10%,rgba(59,130,246,0.18),transparent),
-    radial-gradient(ellipse 40% 30% at 20% 80%,rgba(167,139,250,0.06),transparent),
-    radial-gradient(ellipse 40% 30% at 80% 80%,rgba(6,182,212,0.06),transparent);
-  pointer-events:none;
+.hero-glow {
+  position: absolute;
+  top: -40px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(30,64,175,0.15) 0%, transparent 70%);
+  pointer-events: none;
 }
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);
-  color:#93c5fd;padding:6px 16px;border-radius:100px;
-  font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: .65rem;
+  font-weight: 500;
+  color: var(--blue-bright);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding: 5px 14px;
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 4px;
+  background: rgba(59,130,246,0.05);
 }
-.dot{width:6px;height:6px;border-radius:50%;background:#3b82f6;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{
-  font-size:clamp(2rem,6vw,3.5rem);font-weight:800;line-height:1.1;
-  letter-spacing:-1.5px;margin-bottom:14px;
-  background:linear-gradient(135deg,#f1f5f9 0%,#93c5fd 60%,#a78bfa 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.hero h1 {
+  font-family: 'Fira Code', monospace;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  color: var(--text);
 }
-.hero-sub{color:var(--muted);font-size:.95rem;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6}
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
-.btn-primary{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:12px 28px;background:linear-gradient(135deg,var(--blue2),var(--blue));
-  color:white;border-radius:12px;text-decoration:none;font-size:.88rem;font-weight:700;
-  box-shadow:0 0 24px rgba(59,130,246,0.3);transition:all .2s;
+.hero h1 span {
+  background: linear-gradient(135deg, var(--blue-bright), var(--cyan-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(59,130,246,0.5)}
-.btn-ghost{
-  display:inline-flex;align-items:center;gap:8px;padding:12px 28px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
-  color:#94a3b8;border-radius:12px;text-decoration:none;font-size:.88rem;font-weight:600;
-  transition:all .2s;
+.hero-sub {
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 32px;
 }
-.btn-ghost:hover{background:rgba(255,255,255,0.07);color:var(--text)}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: var(--blue);
+  color: white;
+  border: 1px solid rgba(59,130,246,0.5);
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: 'Fira Code', monospace;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .5px;
+  box-shadow: 0 0 20px rgba(30,64,175,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  transition: all .2s;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--blue-light);
+  box-shadow: 0 0 28px rgba(59,130,246,0.4);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: 'Fira Code', monospace;
+  font-size: .78rem;
+  font-weight: 500;
+  transition: all .2s;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--muted2);
+}
 
 /* CONTAINER */
-.container{max-width:1100px;margin:0 auto;padding:0 16px 48px}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+  position: relative;
+  z-index: 1;
+}
+
+/* SECTION LABEL */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fira Code', monospace;
+  font-size: .65rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+.section-label::before {
+  content: '//';
+  color: var(--blue-light);
+  font-size: .7rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border2), transparent);
+}
 
 /* STAT CARDS */
-.stats-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
-  gap:12px;margin-bottom:32px;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
 }
-.stat-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:22px 18px;position:relative;overflow:hidden;
-  transition:transform .25s,border-color .25s,box-shadow .25s;cursor:default;
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s, transform .25s;
+  cursor: default;
 }
-.stat-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,0.35);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
-.stat-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--accent,rgba(59,130,246,0.6)),transparent);
+.stat-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
 }
-.stat-card::after{
-  content:'';position:absolute;top:0;right:0;width:80px;height:80px;
-  background:radial-gradient(circle at top right,var(--accent-glow,rgba(59,130,246,0.08)),transparent 70%);
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-line, rgba(59,130,246,0.5)), transparent);
 }
-.stat-card.green{--accent:rgba(34,197,94,0.6);--accent-glow:rgba(34,197,94,0.1)}
-.stat-card.rose{--accent:rgba(244,63,94,0.6);--accent-glow:rgba(244,63,94,0.1)}
-.stat-card.amber{--accent:rgba(245,158,11,0.6);--accent-glow:rgba(245,158,11,0.1)}
-.stat-card.purple{--accent:rgba(167,139,250,0.6);--accent-glow:rgba(167,139,250,0.1)}
-.stat-card.cyan{--accent:rgba(6,182,212,0.6);--accent-glow:rgba(6,182,212,0.1)}
-.stat-icon{font-size:1.5rem;margin-bottom:12px;display:block}
-.stat-num{font-size:2rem;font-weight:800;line-height:1;margin-bottom:6px;color:var(--text)}
-.stat-label{font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
-
-/* SECTION */
-.section{margin-bottom:20px}
-.section-label{
-  display:flex;align-items:center;gap:10px;
-  font-size:.7rem;font-weight:700;color:var(--muted);
-  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at top right, var(--accent-glow, rgba(59,130,246,0.06)), transparent 70%);
 }
-.section-label::before{content:'';width:3px;height:12px;border-radius:2px;background:linear-gradient(var(--blue),var(--purple))}
+.stat-card.green {
+  --accent-line: rgba(34,197,94,0.5);
+  --accent-glow: rgba(34,197,94,0.06);
+}
+.stat-card.rose {
+  --accent-line: rgba(244,63,94,0.5);
+  --accent-glow: rgba(244,63,94,0.06);
+}
+.stat-card.amber {
+  --accent-line: rgba(245,158,11,0.5);
+  --accent-glow: rgba(245,158,11,0.06);
+}
+.stat-card.purple {
+  --accent-line: rgba(167,139,250,0.5);
+  --accent-glow: rgba(167,139,250,0.06);
+}
+.stat-card.cyan {
+  --accent-line: rgba(6,182,212,0.5);
+  --accent-glow: rgba(6,182,212,0.06);
+}
+.stat-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: .58rem;
+  color: var(--muted2);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.stat-num {
+  font-family: 'Fira Code', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.stat-label {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 400;
+}
 
 /* CARD */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px}
-.card-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:18px;display:flex;align-items:center;gap:8px}
-.card-title::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--accent-bar,var(--blue))}
-.card.green-bar{--accent-bar:var(--green)}
-.card.amber-bar{--accent-bar:var(--amber)}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.card-title {
+  font-family: 'Fira Code', monospace;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: .3px;
+}
+.card-count {
+  font-family: 'Fira Code', monospace;
+  font-size: .65rem;
+  color: var(--muted);
+  margin-left: auto;
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
 
 /* USIA */
-.usia-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.usia-item{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:12px;padding:16px 8px;text-align:center;transition:all .2s;
+.usia-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
-.usia-item:hover{border-color:var(--blue);transform:translateY(-2px)}
-.usia-num{font-size:1.6rem;font-weight:800;color:var(--blue);line-height:1}
-.usia-label{font-size:.62rem;color:var(--muted);margin-top:6px;font-weight:600;line-height:1.5;text-transform:uppercase;letter-spacing:.5px}
+.usia-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 8px;
+  text-align: center;
+  transition: border-color .2s, background .2s;
+  cursor: default;
+}
+.usia-item:hover {
+  border-color: var(--border2);
+  background: rgba(30,64,175,0.06);
+}
+.usia-num {
+  font-family: 'Fira Code', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blue-bright);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.usia-label {
+  font-family: 'Fira Code', monospace;
+  font-size: .58rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
 
-/* CHARTS GRID */
-.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px}
-
-/* BAR */
-.bar-item{margin-bottom:14px}
-.bar-item:last-child{margin-bottom:0}
-.bar-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.bar-name{font-size:.78rem;color:#cbd5e1;font-weight:500}
-.bar-val{font-size:.72rem;color:var(--muted);font-weight:700;background:var(--surface2);padding:2px 8px;border-radius:6px}
-.bar-track{background:var(--surface2);border-radius:6px;height:6px;overflow:hidden}
-.bar-fill{height:100%;border-radius:6px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
-.fill-blue{background:linear-gradient(90deg,#1d4ed8,#60a5fa)}
-.fill-green{background:linear-gradient(90deg,#15803d,#4ade80)}
-.fill-amber{background:linear-gradient(90deg,#b45309,#fcd34d)}
-.fill-purple{background:linear-gradient(90deg,#6d28d9,#c4b5fd)}
+/* CHARTS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.bar-item { margin-bottom: 12px; }
+.bar-item:last-child { margin-bottom: 0; }
+.bar-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.bar-name {
+  font-size: .78rem;
+  color: #94b8d4;
+  font-weight: 400;
+}
+.bar-val {
+  font-family: 'Fira Code', monospace;
+  font-size: .68rem;
+  color: var(--muted);
+  background: var(--surface2);
+  padding: 1px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+.bar-track {
+  background: var(--surface2);
+  border-radius: 2px;
+  height: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  position: relative;
+}
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: inherit;
+  filter: brightness(1.8);
+  border-radius: 0 2px 2px 0;
+}
+.fill-blue { background: linear-gradient(90deg, #1e3a8a, #3b82f6); }
+.fill-green { background: linear-gradient(90deg, #14532d, #22c55e); }
+.fill-amber { background: linear-gradient(90deg, #78350f, #f59e0b); }
+.fill-purple { background: linear-gradient(90deg, #3b0764, #a78bfa); }
+.fill-cyan { background: linear-gradient(90deg, #164e63, #06b6d4); }
 
 /* TABLE */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:.82rem}
-thead tr{border-bottom:1px solid var(--border)}
-th{
-  text-align:left;padding:10px 14px;
-  color:var(--muted);font-weight:700;font-size:.68rem;
-  text-transform:uppercase;letter-spacing:1px;background:transparent;
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+thead tr { border-bottom: 1px solid var(--border2); }
+th {
+  text-align: left;
+  padding: 9px 12px;
+  font-family: 'Fira Code', monospace;
+  font-size: .62rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
-td{padding:12px 14px;border-bottom:1px solid rgba(30,45,74,0.5);color:#cbd5e1;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(59,130,246,0.04)}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:8px;font-size:.68rem;font-weight:700;letter-spacing:.5px}
-.badge-L{background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.2)}
-.badge-P{background:rgba(244,63,94,0.12);color:#fda4af;border:1px solid rgba(244,63,94,0.2)}
-.name-cell{font-weight:600;color:var(--text)}
-
-/* DIVIDER */
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:8px 0 20px}
+td {
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(13,34,64,0.8);
+  color: #94b8d4;
+  font-size: .78rem;
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(30,64,175,0.04); }
+.td-name {
+  font-weight: 500;
+  color: var(--text) !important;
+}
+.td-num {
+  font-family: 'Fira Code', monospace;
+  color: var(--muted) !important;
+  font-size: .68rem !important;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+.badge-L {
+  background: rgba(30,64,175,0.15);
+  color: var(--blue-bright);
+  border: 1px solid rgba(30,64,175,0.25);
+}
+.badge-P {
+  background: rgba(190,18,60,0.15);
+  color: #fb7185;
+  border: 1px solid rgba(190,18,60,0.25);
+}
 
 /* FOOTER */
-.footer{
-  background:var(--surface);border-top:1px solid var(--border);
-  text-align:center;padding:24px;font-size:.78rem;color:var(--muted);
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 }
-.footer a{color:#60a5fa;text-decoration:none;font-weight:600}
-.footer a:hover{color:var(--blue)}
+.footer-text {
+  font-family: 'Fira Code', monospace;
+  font-size: .65rem;
+  color: var(--muted2);
+  letter-spacing: .5px;
+}
+.footer-link {
+  color: var(--blue-bright);
+  text-decoration: none;
+  font-family: 'Fira Code', monospace;
+  font-size: .65rem;
+}
+.footer-link:hover { text-decoration: underline; }
 
-@media(max-width:640px){
-  .usia-grid{grid-template-columns:repeat(3,1fr)}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .hero{padding:56px 16px 48px}
-  .hero h1{letter-spacing:-1px}
+@media (max-width: 640px) {
+  .usia-grid { grid-template-columns: repeat(3, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav { padding: 12px 16px; }
+  .hero { padding: 100px 16px 60px; }
+  .footer { flex-direction: column; text-align: center; }
 }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Portal Publik</div>
-  <h1>Data Kependudukan</h1>
-  <p class="hero-sub">Statistik penduduk yang transparan, akurat, dan diperbarui secara berkala untuk masyarakat.</p>
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-brand">
+    <div class="nav-brand-icon">
+      <svg viewBox="0 0 16 16" fill="none" stroke="#60a5fa" stroke-width="1.5">
+        <rect x="2" y="2" width="5" height="5" rx="1"/>
+        <rect x="9" y="2" width="5" height="5" rx="1"/>
+        <rect x="2" y="9" width="5" height="5" rx="1"/>
+        <rect x="9" y="9" width="5" height="5" rx="1"/>
+      </svg>
+    </div>
+    SIS.KEPENDUDUKAN
+  </a>
+  <div class="nav-status">
+    <span class="status-dot"></span>
+    SYSTEM_ONLINE
+  </div>
+  <a href="/admin" class="nav-admin">ADMIN_PANEL</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-label">
+    <span class="status-dot"></span>
+    DATA REALTIME
+  </div>
+  <h1>Portal <span>Kependudukan</span></h1>
+  <p class="hero-sub">Sistem informasi kependudukan yang transparan — statistik penduduk, distribusi demografi, dan data KK tersaji secara publik.</p>
   <div class="hero-actions">
     <a href="/admin" class="btn-primary">Masuk Admin Panel</a>
-    <a href="#statistik" class="btn-ghost">Lihat Data</a>
+    <a href="#data" class="btn-ghost">Lihat Data</a>
   </div>
-</div>
+</section>
 
-<div class="container" id="statistik">
+<div class="container" id="data">
 
-  {{-- STAT CARDS --}}
-  <div class="stats-grid">
+  <!-- STAT CARDS -->
+  <div class="section-label">RINGKASAN DATA</div>
+  <div class="stats-grid" id="stats-grid">
     <div class="stat-card">
-      <span class="stat-icon">👥</span>
+      <div class="stat-tag">TOTAL</div>
       <div class="stat-num">{{ number_format($stats['total_penduduk']) }}</div>
       <div class="stat-label">Total Penduduk</div>
     </div>
     <div class="stat-card green">
-      <span class="stat-icon">🧑</span>
+      <div class="stat-tag">GENDER/L</div>
       <div class="stat-num">{{ number_format($stats['total_laki']) }}</div>
       <div class="stat-label">Laki-laki</div>
     </div>
     <div class="stat-card rose">
-      <span class="stat-icon">👩</span>
+      <div class="stat-tag">GENDER/P</div>
       <div class="stat-num">{{ number_format($stats['total_perempuan']) }}</div>
       <div class="stat-label">Perempuan</div>
     </div>
     <div class="stat-card amber">
-      <span class="stat-icon">🏠</span>
+      <div class="stat-tag">KK</div>
       <div class="stat-num">{{ number_format($stats['total_kk']) }}</div>
       <div class="stat-label">Kepala Keluarga</div>
     </div>
     <div class="stat-card purple">
-      <span class="stat-icon">💍</span>
+      <div class="stat-tag">NIKAH</div>
       <div class="stat-num">{{ number_format($stats['total_nikah']) }}</div>
       <div class="stat-label">Data Pernikahan</div>
     </div>
     <div class="stat-card cyan">
-      <span class="stat-icon">🏘️</span>
+      <div class="stat-tag">WILAYAH</div>
       <div class="stat-num">{{ number_format($stats['total_rw']) }}</div>
       <div class="stat-label">Total RW</div>
     </div>
   </div>
 
-  {{-- KELOMPOK USIA --}}
-  <div class="section">
-    <div class="section-label">Kelompok Usia</div>
-    <div class="card">
-      <div class="usia-grid">
-        <div class="usia-item">
-          <div class="usia-num">{{ $usia['balita'] }}</div>
-          <div class="usia-label">Balita<br>0–4 thn</div>
-        </div>
-        <div class="usia-item">
-          <div class="usia-num">{{ $usia['anak'] }}</div>
-          <div class="usia-label">Anak<br>5–14 thn</div>
-        </div>
-        <div class="usia-item">
-          <div class="usia-num">{{ $usia['remaja'] }}</div>
-          <div class="usia-label">Remaja<br>15–24 thn</div>
-        </div>
-        <div class="usia-item">
-          <div class="usia-num">{{ $usia['dewasa'] }}</div>
-          <div class="usia-label">Dewasa<br>25–59 thn</div>
-        </div>
-        <div class="usia-item">
-          <div class="usia-num">{{ $usia['lansia'] }}</div>
-          <div class="usia-label">Lansia<br>60+ thn</div>
-        </div>
+  <!-- KELOMPOK USIA -->
+  <div class="section-label">DISTRIBUSI USIA</div>
+  <div class="card" id="usia-card">
+    <div class="usia-grid">
+      <div class="usia-item">
+        <div class="usia-num">{{ $usia['balita'] }}</div>
+        <div class="usia-label">BALITA<br>0–4</div>
+      </div>
+      <div class="usia-item">
+        <div class="usia-num">{{ $usia['anak'] }}</div>
+        <div class="usia-label">ANAK<br>5–14</div>
+      </div>
+      <div class="usia-item">
+        <div class="usia-num">{{ $usia['remaja'] }}</div>
+        <div class="usia-label">REMAJA<br>15–24</div>
+      </div>
+      <div class="usia-item">
+        <div class="usia-num">{{ $usia['dewasa'] }}</div>
+        <div class="usia-label">DEWASA<br>25–59</div>
+      </div>
+      <div class="usia-item">
+        <div class="usia-num">{{ $usia['lansia'] }}</div>
+        <div class="usia-label">LANSIA<br>60+</div>
       </div>
     </div>
   </div>
 
-  {{-- CHARTS: AGAMA + PENDIDIKAN --}}
-  <div class="section">
-    <div class="section-label">Distribusi Data</div>
-    <div class="charts-grid">
-      <div class="card">
-        <div class="card-title">Agama</div>
-        @php $maxAgama = $agama->max('total') ?: 1; @endphp
-        @foreach($agama as $item)
-        <div class="bar-item">
-          <div class="bar-meta">
-            <span class="bar-name">{{ $item->religion ?: 'Tidak Diisi' }}</span>
-            <span class="bar-val">{{ $item->total }}</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill fill-blue" style="width:{{ ($item->total/$maxAgama)*100 }}%"></div>
-          </div>
-        </div>
-        @endforeach
+  <!-- AGAMA + PENDIDIKAN -->
+  <div class="section-label">DISTRIBUSI DEMOGRAFI</div>
+  <div class="charts-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">AGAMA</div>
+        <div class="card-count">{{ $agama->count() }} KATEGORI</div>
       </div>
-
-      <div class="card green-bar">
-        <div class="card-title">Pendidikan</div>
-        @php $maxPendidikan = $pendidikan->max('total') ?: 1; @endphp
-        @foreach($pendidikan as $item)
-        <div class="bar-item">
-          <div class="bar-meta">
-            <span class="bar-name">{{ $item->education ?: 'Tidak Diisi' }}</span>
-            <span class="bar-val">{{ $item->total }}</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill fill-green" style="width:{{ ($item->total/$maxPendidikan)*100 }}%"></div>
-          </div>
+      @php $maxAgama = $agama->max('total') ?: 1; @endphp
+      @foreach($agama as $item)
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-name">{{ strtoupper($item->religion ?: 'N/A') }}</span>
+          <span class="bar-val">{{ $item->total }}</span>
         </div>
-        @endforeach
+        <div class="bar-track">
+          <div class="bar-fill fill-blue" style="width:{{ ($item->total/$maxAgama)*100 }}%"></div>
+        </div>
       </div>
+      @endforeach
     </div>
 
-    {{-- PEKERJAAN --}}
-    <div class="card amber-bar">
-      <div class="card-title">Pekerjaan (Top 8)</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">PENDIDIKAN</div>
+        <div class="card-count">{{ $pendidikan->count() }} KATEGORI</div>
+      </div>
+      @php $maxPendidikan = $pendidikan->max('total') ?: 1; @endphp
+      @foreach($pendidikan as $item)
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-name">{{ strtoupper($item->education ?: 'N/A') }}</span>
+          <span class="bar-val">{{ $item->total }}</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill fill-green" style="width:{{ ($item->total/$maxPendidikan)*100 }}%"></div>
+        </div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+
+  <!-- PEKERJAAN + STATUS KAWIN -->
+  <div class="charts-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">PEKERJAAN</div>
+        <div class="card-count">TOP 8</div>
+      </div>
       @php $maxPekerjaan = $pekerjaan->max('total') ?: 1; @endphp
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 32px">
-        @foreach($pekerjaan as $item)
-        <div class="bar-item">
-          <div class="bar-meta">
-            <span class="bar-name">{{ $item->occupation ?: 'Tidak Diisi' }}</span>
-            <span class="bar-val">{{ $item->total }}</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill fill-amber" style="width:{{ ($item->total/$maxPekerjaan)*100 }}%"></div>
-          </div>
+      @foreach($pekerjaan as $item)
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-name">{{ strtoupper($item->occupation ?: 'N/A') }}</span>
+          <span class="bar-val">{{ $item->total }}</span>
         </div>
-        @endforeach
+        <div class="bar-track">
+          <div class="bar-fill fill-amber" style="width:{{ ($item->total/$maxPekerjaan)*100 }}%"></div>
+        </div>
       </div>
+      @endforeach
     </div>
-  </div>
 
-  {{-- STATUS PERKAWINAN --}}
-  <div class="section">
-    <div class="section-label">Status Perkawinan</div>
     <div class="card">
+      <div class="card-header">
+        <div class="card-title">STATUS KAWIN</div>
+        <div class="card-count">{{ $status_kawin->count() }} STATUS</div>
+      </div>
       @php $maxKawin = $status_kawin->max('total') ?: 1; @endphp
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 32px">
-        @foreach($status_kawin as $item)
-        <div class="bar-item">
-          <div class="bar-meta">
-            <span class="bar-name">{{ $item->marital_status ?: 'Tidak Diisi' }}</span>
-            <span class="bar-val">{{ $item->total }}</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill fill-purple" style="width:{{ ($item->total/$maxKawin)*100 }}%"></div>
-          </div>
+      @foreach($status_kawin as $item)
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-name">{{ strtoupper($item->marital_status ?: 'N/A') }}</span>
+          <span class="bar-val">{{ $item->total }}</span>
         </div>
-        @endforeach
+        <div class="bar-track">
+          <div class="bar-fill fill-purple" style="width:{{ ($item->total/$maxKawin)*100 }}%"></div>
+        </div>
       </div>
+      @endforeach
     </div>
   </div>
 
-  {{-- TABEL PENDUDUK TERBARU --}}
-  <div class="section">
-    <div class="section-label">Penduduk Terbaru</div>
-    <div class="card">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nama</th>
-              <th>Gender</th>
-              <th>Tgl Lahir</th>
-              <th>Agama</th>
-              <th>Pekerjaan</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse($penduduk_terbaru as $i => $p)
-            <tr>
-              <td style="color:var(--muted);font-size:.75rem">{{ $i+1 }}</td>
-              <td class="name-cell">{{ $p->full_name }}</td>
-              <td>
-                <span class="badge {{ $p->gender==='Laki-laki'?'badge-L':'badge-P' }}">
-                  {{ $p->gender==='Laki-laki'?'L':'P' }}
-                </span>
-              </td>
-              <td style="color:var(--muted)">{{ $p->birth_date?$p->birth_date->format('d M Y'):'-' }}</td>
-              <td>{{ $p->religion??'-' }}</td>
-              <td>{{ $p->occupation??'-' }}</td>
-              <td style="color:var(--muted);font-size:.75rem">{{ $p->marital_status??'-' }}</td>
-            </tr>
-            @empty
-            <tr>
-              <td colspan="7" style="text-align:center;color:var(--muted);padding:40px;font-size:.88rem">
-                Belum ada data penduduk
-              </td>
-            </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+  <!-- TABEL -->
+  <div class="section-label">PENDUDUK TERBARU</div>
+  <div class="card" id="table-card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>NAMA</th>
+            <th>GDR</th>
+            <th>TGL LAHIR</th>
+            <th>AGAMA</th>
+            <th>PEKERJAAN</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($penduduk_terbaru as $i => $p)
+          <tr>
+            <td class="td-num">{{ str_pad($i+1, 2, '0', STR_PAD_LEFT) }}</td>
+            <td class="td-name">{{ $p->full_name }}</td>
+            <td>
+              <span class="badge {{ $p->gender==='Laki-laki'?'badge-L':'badge-P' }}">
+                {{ $p->gender==='Laki-laki'?'L':'P' }}
+              </span>
+            </td>
+            <td class="td-num">{{ $p->birth_date?$p->birth_date->format('d/m/Y'):'-' }}</td>
+            <td>{{ $p->religion??'-' }}</td>
+            <td>{{ $p->occupation??'-' }}</td>
+            <td class="td-num">{{ $p->marital_status??'-' }}</td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="7" style="text-align:center;color:var(--muted);padding:40px;font-family:'Fira Code',monospace;font-size:.72rem;letter-spacing:1px">
+              NO_DATA_FOUND
+            </td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
     </div>
   </div>
 
 </div>
 
-<div class="footer">
-  Data diperbarui secara berkala &bull; Sistem Informasi Kependudukan &bull;
-  <a href="/admin">Login Admin</a>
-</div>
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="footer-text">SIS.KEPENDUDUKAN v1.0 — DATA PUBLIK</span>
+  <a href="/admin" class="footer-link">LOGIN_ADMIN</a>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Stagger stat cards
+  gsap.from('#stats-grid .stat-card', {
+    opacity: 0,
+    y: 20,
+    scale: 0.96,
+    duration: 0.4,
+    stagger: { each: 0.06, from: 'start' },
+    ease: 'back.out(1.4)',
+    delay: 0.2
+  });
+
+  // Usia items
+  gsap.from('#usia-card .usia-item', {
+    opacity: 0,
+    y: 14,
+    duration: 0.35,
+    stagger: 0.05,
+    ease: 'power2.out',
+    delay: 0.5
+  });
+
+  // Table rows
+  gsap.from('#table-card tbody tr', {
+    opacity: 0,
+    x: -8,
+    duration: 0.3,
+    stagger: 0.04,
+    ease: 'power1.out',
+    delay: 0.7
+  });
+
+  // Bar fills animate width from 0
+  document.querySelectorAll('.bar-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => {
+      bar.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+      bar.style.width = target;
+    }, 800);
+  });
+});
+</script>
 
 </body>
 </html>
