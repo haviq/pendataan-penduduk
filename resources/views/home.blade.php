@@ -4,646 +4,656 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal Kependudukan</title>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
 :root {
-  --bg:       #06090f;
-  --surface:  #0c1220;
-  --surface2: #101828;
-  --border:   #1a2540;
-  --border2:  #243354;
-  --text:     #e6edf8;
-  --sub:      #8ba3c4;
-  --muted:    #4d6a8f;
-  --blue:     #2563eb;
-  --blue-l:   #3b82f6;
-  --blue-ll:  #93c5fd;
-  --green:    #16a34a;
-  --green-l:  #22c55e;
-  --rose:     #be123c;
-  --rose-l:   #fb7185;
-  --amber:    #b45309;
-  --amber-l:  #fbbf24;
-  --purple:   #6d28d9;
-  --purple-l: #a78bfa;
-  --cyan:     #0e7490;
-  --cyan-l:   #22d3ee;
-  --teal:     #0d9488;
-  --teal-l:   #2dd4bf;
+  --white:   #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100:#f3f4f6;
+  --gray-200:#e5e7eb;
+  --gray-300:#d1d5db;
+  --gray-400:#9ca3af;
+  --gray-500:#6b7280;
+  --gray-600:#4b5563;
+  --gray-700:#374151;
+  --gray-800:#1f2937;
+  --gray-900:#111827;
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --green-50: #f0fdf4;
+  --green-100:#dcfce7;
+  --green-500:#22c55e;
+  --green-600:#16a34a;
+  --rose-50:  #fff1f2;
+  --rose-100: #ffe4e6;
+  --rose-500: #f43f5e;
+  --rose-600: #e11d48;
+  --amber-50: #fffbeb;
+  --amber-100:#fef3c7;
+  --amber-500:#f59e0b;
+  --amber-600:#d97706;
+  --purple-50:#faf5ff;
+  --purple-100:#f3e8ff;
+  --purple-500:#a855f7;
+  --purple-600:#9333ea;
+  --teal-50:  #f0fdfa;
+  --teal-100: #ccfbf1;
+  --teal-500: #14b8a6;
+  --teal-600: #0d9488;
+  --radius-sm:6px;
+  --radius:   10px;
+  --radius-lg:14px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow:   0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.05);
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--gray-50);
+  color: var(--gray-900);
   min-height: 100vh;
-  overflow-x: hidden;
-}
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px);
-  background-size: 52px 52px;
-  pointer-events: none;
-  z-index: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* NAV */
+/* ── NAV ── */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; height: 52px;
-  background: rgba(6,9,15,0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gray-200);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  gap: 12px;
 }
-.nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
 .nav-logo {
-  width: 28px; height: 28px;
-  background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--blue-600);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.nav-logo svg { width: 14px; height: 14px; }
-.nav-title {
-  font-family: 'Fira Code', monospace;
-  font-size: .72rem; font-weight: 700;
-  color: var(--blue-ll); letter-spacing: 1.5px;
+.nav-logo svg { width: 16px; height: 16px; color: white; }
+.nav-title { font-size: .9rem; font-weight: 700; color: var(--gray-900); flex: 1; }
+.nav-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .72rem; font-weight: 500; color: var(--green-600);
+  background: var(--green-50); border: 1px solid var(--green-100);
+  padding: 3px 9px; border-radius: 99px;
 }
-.nav-status { display: flex; align-items: center; gap: 6px; font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 600; color: var(--muted); letter-spacing: 1px; }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-l); box-shadow: 0 0 7px var(--green-l); animation: blink 2.4s ease-in-out infinite; }
-@keyframes blink { 0%,100%{opacity:1} 55%{opacity:.25} }
-.nav-btn {
-  font-family: 'Fira Code', monospace; font-size: .68rem; font-weight: 700;
-  color: var(--blue-ll); text-decoration: none;
-  border: 1px solid rgba(59,130,246,0.28);
-  padding: 5px 13px; border-radius: 5px;
-  background: rgba(37,99,235,0.07);
-  transition: background .18s, border-color .18s;
+.nav-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-500); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.nav-link {
+  font-size: .8rem; font-weight: 600; color: var(--gray-600);
+  text-decoration: none; padding: 5px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  transition: background .15s, color .15s;
 }
-.nav-btn:hover { background: rgba(37,99,235,0.16); border-color: rgba(59,130,246,0.55); }
+.nav-link:hover { background: var(--gray-100); color: var(--gray-900); }
 
-/* HERO */
-.hero {
-  position: relative; z-index: 1;
-  padding: 108px 24px 52px;
-  max-width: 960px; margin: 0 auto;
-}
-.hero-tag {
+/* ── PAGE ── */
+.page { max-width: 1024px; margin: 0 auto; padding: 28px 20px 64px; }
+
+/* ── HERO ── */
+.hero { margin-bottom: 28px; }
+.hero-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 700;
-  color: var(--blue-ll); letter-spacing: 1.5px;
-  border: 1px solid rgba(59,130,246,0.25);
-  background: rgba(37,99,235,0.08);
-  padding: 4px 11px; border-radius: 4px; margin-bottom: 16px;
+  font-size: .72rem; font-weight: 600; color: var(--blue-600);
+  background: var(--blue-50); border: 1px solid var(--blue-100);
+  padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
 }
-.hero-tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue-ll); }
-.hero-title {
-  font-size: clamp(1.75rem, 5vw, 2.8rem);
-  font-weight: 800; line-height: 1.1;
-  letter-spacing: -1px; margin-bottom: 12px;
-  color: var(--text);
-}
-.hero-title span { color: var(--blue-l); }
-.hero-sub {
-  font-size: .9rem; color: var(--sub);
-  max-width: 500px; line-height: 1.65;
-}
+.hero h1 { font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 800; color: var(--gray-900); line-height: 1.15; margin-bottom: 6px; }
+.hero p { font-size: .9rem; color: var(--gray-500); max-width: 480px; line-height: 1.65; }
 
-/* MAIN WRAP */
-.wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px 64px; }
+/* ── SECTION TITLE ── */
+.sec { margin-bottom: 10px; }
+.sec-title { font-size: .72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .06em; }
 
-/* SECTION LABEL */
-.sec-label {
-  font-family: 'Fira Code', monospace;
-  font-size: .6rem; font-weight: 700;
-  color: var(--muted); letter-spacing: 2px;
-  text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 12px;
-}
-.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-/* CARD */
+/* ── CARDS ── */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
 }
-.card-title {
-  font-family: 'Fira Code', monospace;
-  font-size: .65rem; font-weight: 700;
-  color: var(--muted); letter-spacing: 1.5px;
-  text-transform: uppercase; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 7px;
-}
-.card-title svg { width: 12px; height: 12px; }
+.card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.card-icon { width: 30px; height: 30px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-icon svg { width: 15px; height: 15px; }
+.card-title { font-size: .82rem; font-weight: 600; color: var(--gray-700); }
 
-/* STAT GRID */
-.sg { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 12px; }
-.sc {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 16px 12px;
-  display: flex; flex-direction: column; gap: 6px;
-  transition: border-color .2s, transform .2s;
+/* ── STAT GRID ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+@media (min-width: 480px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .stat-grid { grid-template-columns: repeat(5, 1fr); } }
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  transition: box-shadow .2s, transform .2s;
   cursor: default;
 }
-.sc:hover { border-color: var(--border2); transform: translateY(-1px); }
-.sc-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
-.sc-icon svg { width: 14px; height: 14px; }
-.sc-num { font-family: 'Inter', sans-serif; font-size: 1.55rem; font-weight: 800; line-height: 1; letter-spacing: -1px; }
-.sc-lbl { font-family: 'Fira Code', monospace; font-size: .56rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.sc-sub { font-family: 'Fira Code', monospace; font-size: .6rem; color: var(--muted); }
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.stat-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.stat-icon svg { width: 16px; height: 16px; }
+.stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; letter-spacing: -.03em; color: var(--gray-900); margin-bottom: 3px; }
+.stat-label { font-size: .75rem; font-weight: 500; color: var(--gray-500); }
+.stat-sub { font-size: .7rem; color: var(--gray-400); margin-top: 2px; }
 
-.ic-blue  { background: rgba(37,99,235,0.12); color: var(--blue-l); }
-.ic-green { background: rgba(22,163,74,0.12); color: var(--green-l); }
-.ic-rose  { background: rgba(190,18,60,0.12); color: var(--rose-l); }
-.ic-amber { background: rgba(180,83,9,0.12); color: var(--amber-l); }
-.ic-purple{ background: rgba(109,40,217,0.12); color: var(--purple-l); }
-.ic-cyan  { background: rgba(14,116,144,0.12); color: var(--cyan-l); }
-.ic-teal  { background: rgba(13,148,136,0.12); color: var(--teal-l); }
+/* color tokens for icons */
+.ic-blue   { background: var(--blue-50);   color: var(--blue-600); }
+.ic-green  { background: var(--green-50);  color: var(--green-600); }
+.ic-rose   { background: var(--rose-50);   color: var(--rose-600); }
+.ic-amber  { background: var(--amber-50);  color: var(--amber-600); }
+.ic-purple { background: var(--purple-50); color: var(--purple-600); }
+.ic-teal   { background: var(--teal-50);   color: var(--teal-600); }
 
-.cn-blue   { color: var(--blue-l); }
-.cn-green  { color: var(--green-l); }
-.cn-rose   { color: var(--rose-l); }
-.cn-amber  { color: var(--amber-l); }
-.cn-purple { color: var(--purple-l); }
-.cn-cyan   { color: var(--cyan-l); }
-.cn-teal   { color: var(--teal-l); }
-
-/* USIA — progress bar style */
-.usia-grid { display: flex; flex-direction: column; gap: 11px; }
-.usia-row { display: flex; align-items: center; gap: 10px; }
-.usia-lbl { font-family: 'Fira Code', monospace; font-size: .64rem; font-weight: 700; color: var(--sub); width: 54px; flex-shrink: 0; text-transform: uppercase; letter-spacing: .5px; }
-.usia-bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
-.usia-bar { height: 100%; border-radius: 4px; position: relative; }
-.usia-bar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: inherit; filter: brightness(2.5); border-radius: 0 4px 4px 0; }
-.usia-num { font-family: 'Fira Code', monospace; font-size: .64rem; font-weight: 700; color: var(--text); width: 38px; text-align: right; flex-shrink: 0; }
-.usia-pct { font-family: 'Fira Code', monospace; font-size: .58rem; color: var(--muted); width: 34px; text-align: right; flex-shrink: 0; }
-
-/* CHARTS GRID */
-.cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 12px; margin-bottom: 12px; }
-
-/* BAR CHART */
-.bi { margin-bottom: 11px; }
-.bi:last-child { margin-bottom: 0; }
-.bm { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-.bn { font-size: .76rem; font-weight: 600; color: var(--sub); }
-.bv {
-  font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 700;
-  color: var(--muted); background: var(--surface2);
-  border: 1px solid var(--border); padding: 1px 7px; border-radius: 4px;
+/* ── ROW 2 STAT ── */
+.stat-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
 }
-.bt { background: var(--surface2); border-radius: 3px; height: 5px; overflow: hidden; }
-.bf { height: 100%; border-radius: 3px; position: relative; }
-.bf::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: inherit; filter: brightness(2); border-radius: 0 3px 3px 0; }
-.fb { background: linear-gradient(90deg, #1e3a8a, #3b82f6); }
-.fg { background: linear-gradient(90deg, #14532d, #22c55e); }
-.fa { background: linear-gradient(90deg, #78350f, #fbbf24); }
-.fp { background: linear-gradient(90deg, #3b0764, #a78bfa); }
-.fc { background: linear-gradient(90deg, #164e63, #22d3ee); }
-.ft2{ background: linear-gradient(90deg, #134e4a, #2dd4bf); }
+@media (min-width: 600px) { .stat-grid-2 { grid-template-columns: repeat(4, 1fr); } }
 
-/* DONUT */
+/* ── TWO COLUMN LAYOUT ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (min-width: 640px) { .two-col { grid-template-columns: 1fr 1fr; } }
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (min-width: 640px) { .three-col { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .three-col { grid-template-columns: 1fr 1fr 1fr; } }
+
+/* ── USIA BARS ── */
+.usia-list { display: flex; flex-direction: column; gap: 13px; }
+.usia-row { display: grid; grid-template-columns: 56px 1fr 44px 36px; align-items: center; gap: 10px; }
+.usia-label { font-size: .75rem; font-weight: 600; color: var(--gray-600); }
+.usia-track { background: var(--gray-100); border-radius: 99px; height: 7px; overflow: hidden; }
+.usia-fill { height: 100%; border-radius: 99px; }
+.usia-val { font-size: .78rem; font-weight: 700; color: var(--gray-800); text-align: right; }
+.usia-pct { font-size: .68rem; color: var(--gray-400); text-align: right; }
+
+/* ── BAR LIST ── */
+.bar-list { display: flex; flex-direction: column; gap: 11px; }
+.bar-row {}
+.bar-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.bar-name { font-size: .8rem; font-weight: 500; color: var(--gray-700); }
+.bar-meta { font-size: .72rem; color: var(--gray-400); }
+.bar-track { background: var(--gray-100); border-radius: 99px; height: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; }
+
+/* ── DONUT ── */
 .donut-wrap { display: flex; align-items: center; gap: 20px; }
-.donut-canvas-wrap { width: 120px; height: 120px; flex-shrink: 0; position: relative; }
+.donut-canvas { width: 110px; height: 110px; flex-shrink: 0; position: relative; }
+.donut-canvas canvas { display: block; }
 .donut-center {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; pointer-events: none;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none;
 }
-.donut-center-num { font-size: 1.1rem; font-weight: 800; color: var(--text); line-height: 1; }
-.donut-center-lbl { font-family: 'Fira Code', monospace; font-size: .48rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-.donut-legend { flex: 1; }
-.dl-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
-.dl-row:last-child { margin-bottom: 0; }
-.dl-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-.dl-name { font-size: .8rem; font-weight: 600; color: var(--sub); flex: 1; }
-.dl-val { font-family: 'Fira Code', monospace; font-size: .68rem; font-weight: 700; color: var(--text); }
-.dl-pct { font-family: 'Fira Code', monospace; font-size: .62rem; color: var(--muted); margin-left: 4px; }
+.donut-center-num { font-size: 1.15rem; font-weight: 800; color: var(--gray-900); line-height: 1; }
+.donut-center-lbl { font-size: .58rem; font-weight: 500; color: var(--gray-400); margin-top: 2px; letter-spacing: .03em; text-transform: uppercase; }
+.legend { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+.legend-row { display: flex; align-items: center; gap: 8px; }
+.legend-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.legend-name { font-size: .8rem; color: var(--gray-600); flex: 1; }
+.legend-val { font-size: .8rem; font-weight: 700; color: var(--gray-800); }
+.legend-pct { font-size: .72rem; color: var(--gray-400); margin-left: 3px; }
+.legend-divider { height: 1px; background: var(--gray-100); margin: 2px 0; }
 
-/* RT TABLE */
-.rt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+/* ── RT GRID ── */
+.rt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 480px) { .rt-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .rt-grid { grid-template-columns: repeat(4, 1fr); } }
+
 .rt-card {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 14px;
-  display: flex; flex-direction: column; gap: 4px;
-  transition: border-color .2s;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 14px;
+  transition: box-shadow .2s;
 }
-.rt-card:hover { border-color: var(--border2); }
-.rt-card-label { font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 700; color: var(--blue-ll); letter-spacing: 1px; text-transform: uppercase; }
-.rt-nums { display: flex; align-items: baseline; gap: 4px; margin-top: 4px; }
-.rt-big { font-size: 1.6rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -1px; }
-.rt-unit { font-family: 'Fira Code', monospace; font-size: .6rem; color: var(--muted); }
-.rt-kk { font-family: 'Fira Code', monospace; font-size: .62rem; color: var(--muted); }
-.rt-bar-wrap { background: var(--border); border-radius: 3px; height: 3px; margin-top: 8px; overflow: hidden; }
-.rt-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #1e3a8a, #3b82f6); }
+.rt-card:hover { box-shadow: var(--shadow-md); }
+.rt-label { font-size: .68rem; font-weight: 600; color: var(--blue-600); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.rt-num { font-size: 1.5rem; font-weight: 800; color: var(--gray-900); line-height: 1; letter-spacing: -.03em; }
+.rt-unit { font-size: .72rem; font-weight: 500; color: var(--gray-400); }
+.rt-kk { font-size: .72rem; color: var(--gray-400); margin-top: 3px; }
+.rt-track { background: var(--gray-100); border-radius: 99px; height: 3px; margin-top: 10px; overflow: hidden; }
+.rt-fill { height: 100%; border-radius: 99px; background: var(--blue-500); }
 
-/* TABLE */
-.tbl-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
-.search-wrap { position: relative; }
-.search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; color: var(--muted); pointer-events: none; }
+/* ── TABLE ── */
+.tbl-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.tbl-title { font-size: .82rem; font-weight: 600; color: var(--gray-700); }
+.search-box {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm); padding: 6px 11px;
+  transition: border-color .15s;
+}
+.search-box:focus-within { border-color: var(--blue-500); background: var(--white); }
+.search-box svg { width: 13px; height: 13px; color: var(--gray-400); flex-shrink: 0; }
 #tbl-search {
-  font-family: 'Fira Code', monospace; font-size: .68rem; font-weight: 600;
-  background: var(--surface2); border: 1px solid var(--border);
-  color: var(--text); padding: 6px 10px 6px 30px;
-  border-radius: 6px; width: 200px; outline: none;
-  transition: border-color .18s;
+  border: none; outline: none; background: transparent;
+  font-family: inherit; font-size: .8rem; color: var(--gray-900);
+  width: 160px;
 }
-#tbl-search:focus { border-color: var(--border2); }
-#tbl-search::placeholder { color: var(--muted); }
+#tbl-search::placeholder { color: var(--gray-400); }
 
-.tw { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: .79rem; }
-thead tr { border-bottom: 1px solid var(--border2); }
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { border-bottom: 1px solid var(--gray-200); }
 th {
-  text-align: left; padding: 9px 12px;
-  font-family: 'Fira Code', monospace;
-  font-size: .58rem; font-weight: 700;
-  color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+  text-align: left; padding: 8px 12px;
+  font-size: .7rem; font-weight: 600; color: var(--gray-400);
+  text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
 }
-td { padding: 10px 12px; border-bottom: 1px solid rgba(26,37,64,0.6); color: var(--sub); vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(37,99,235,0.04); }
-.tname { font-weight: 700; color: var(--text) !important; }
-.tage { font-family: 'Fira Code', monospace; font-size: .68rem; color: var(--blue-ll) !important; }
-.tnum { font-family: 'Fira Code', monospace; color: var(--muted) !important; font-size: .66rem !important; }
+td { padding: 11px 12px; border-bottom: 1px solid var(--gray-100); font-size: .82rem; color: var(--gray-600); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--gray-50); }
+.td-name { font-weight: 600; color: var(--gray-900); }
+.td-age { font-weight: 600; color: var(--blue-600); }
+.td-muted { color: var(--gray-400); }
 .badge {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px; border-radius: 4px;
-  font-family: 'Fira Code', monospace; font-size: .58rem; font-weight: 700; letter-spacing: .5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px 8px; border-radius: 99px;
+  font-size: .68rem; font-weight: 600; letter-spacing: .02em;
 }
-.bL { background: rgba(37,99,235,0.12); color: var(--blue-ll); border: 1px solid rgba(37,99,235,0.22); }
-.bP { background: rgba(190,18,60,0.12); color: var(--rose-l); border: 1px solid rgba(190,18,60,0.22); }
-.no-result { text-align: center; padding: 24px; color: var(--muted); font-family: 'Fira Code', monospace; font-size: .7rem; }
+.badge-m { background: var(--blue-50); color: var(--blue-600); }
+.badge-f { background: var(--rose-50); color: var(--rose-600); }
+.no-result { text-align: center; padding: 32px; color: var(--gray-400); font-size: .85rem; }
 
-/* PAGINATION */
-.pager { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; flex-wrap: wrap; gap: 8px; }
-.pager-info { font-family: 'Fira Code', monospace; font-size: .6rem; color: var(--muted); }
-.pager-btns { display: flex; gap: 4px; }
+/* ── PAGER ── */
+.pager { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--gray-100); }
+.pager-info { font-size: .75rem; color: var(--gray-400); }
+.pager-btns { display: flex; gap: 4px; flex-wrap: wrap; }
 .pg-btn {
-  font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 700;
-  color: var(--sub); background: var(--surface2); border: 1px solid var(--border);
-  padding: 4px 10px; border-radius: 4px; cursor: pointer;
-  transition: background .15s, border-color .15s, color .15s;
+  height: 28px; min-width: 28px; padding: 0 8px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: 6px; font-family: inherit; font-size: .75rem;
+  font-weight: 500; color: var(--gray-600); cursor: pointer;
+  transition: all .15s; display: flex; align-items: center; justify-content: center;
 }
-.pg-btn:hover:not(:disabled) { background: var(--surface); border-color: var(--border2); color: var(--text); }
+.pg-btn:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-300); color: var(--gray-900); }
+.pg-btn.active { background: var(--blue-600); border-color: var(--blue-600); color: white; }
 .pg-btn:disabled { opacity: .35; cursor: default; }
-.pg-btn.active { background: rgba(37,99,235,0.15); border-color: rgba(59,130,246,0.35); color: var(--blue-ll); }
 
-/* FOOTER */
+/* ── FOOTER ── */
 .footer {
-  position: relative; z-index: 1;
-  border-top: 1px solid var(--border);
-  padding: 18px 24px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  border-top: 1px solid var(--gray-200);
+  padding: 18px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
+  max-width: 1024px; margin: 0 auto;
 }
-.ft { font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 600; color: var(--muted); letter-spacing: .5px; }
-.fa-link { color: var(--blue-ll); text-decoration: none; }
-.fa-link:hover { text-decoration: underline; }
+.footer-text { font-size: .75rem; color: var(--gray-400); }
+.footer-link { font-size: .75rem; font-weight: 500; color: var(--blue-600); text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
 
-@media (max-width: 640px) {
-  .sg { grid-template-columns: repeat(3,1fr); }
-  .hero { padding: 90px 16px 40px; }
-  .wrap { padding: 0 16px 48px; }
-  .footer { flex-direction: column; align-items: flex-start; }
-}
+/* ── DIVIDER LABEL ── */
+.divider { display: flex; align-items: center; gap: 10px; margin: 24px 0 12px; }
+.divider-label { font-size: .72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.divider-line { flex: 1; height: 1px; background: var(--gray-200); }
+
+/* ── UTILS ── */
+.mb-12 { margin-bottom: 12px; }
+.mb-24 { margin-bottom: 24px; }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav class="nav">
-  <a href="/" class="nav-brand">
-    <div class="nav-logo">
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="1" y="1" width="12" height="12" rx="2"/>
-        <path d="M4 7h6M7 4v6"/>
-      </svg>
-    </div>
-    <span class="nav-title">PENDUDUK.SYS</span>
-  </a>
-  <div class="nav-status">
-    <span class="status-dot"></span>
-    <span>LIVE — {{ number_format($stats['total_penduduk']) }} JIWA</span>
+  <div class="nav-logo">
+    <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/>
+    </svg>
   </div>
-  <a href="/admin" class="nav-btn">LOGIN_ADMIN</a>
+  <span class="nav-title">Portal Kependudukan</span>
+  <div class="nav-badge">
+    <span class="nav-badge-dot"></span>
+    Live · {{ number_format($stats['total_penduduk']) }} jiwa
+  </div>
+  <a href="/admin" class="nav-link">Masuk Admin</a>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag"><span class="hero-tag-dot"></span>SISTEM INFORMASI KEPENDUDUKAN</div>
-  <h1 class="hero-title">Portal Data<br><span>Warga Publik</span></h1>
-  <p class="hero-sub">Data kependudukan real-time. Statistik demografi, distribusi usia, persebaran RT/RW, dan laporan warga terbaru.</p>
-</section>
+<!-- PAGE -->
+<main class="page">
 
-<div class="wrap">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+      Sistem Informasi Kependudukan
+    </div>
+    <h1>Data Warga<br>Terpusat & Publik</h1>
+    <p>Statistik kependudukan real-time — demografi, distribusi usia, persebaran RT/RW, dan rekap warga terbaru.</p>
+  </div>
 
-  <!-- ===== STATS UTAMA ===== -->
-  <div class="sec-label">RINGKASAN DATA</div>
-  <div id="sg" class="sg" style="margin-bottom:12px;">
+  <!-- STAT ROW 1 -->
+  <div class="sec mb-12"><span class="sec-title">Ringkasan</span></div>
+  <div class="stat-grid">
 
-    <div class="sc">
-      <div class="sc-icon ic-blue">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="4" r="2.5"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-blue">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>
       </div>
-      <div class="sc-num cn-blue">{{ number_format($stats['total_penduduk']) }}</div>
-      <div class="sc-lbl">Total Penduduk</div>
-      <div class="sc-sub">aktif tercatat</div>
+      <div class="stat-num">{{ number_format($stats['total_penduduk']) }}</div>
+      <div class="stat-label">Total Penduduk</div>
+      <div class="stat-sub">aktif tercatat</div>
     </div>
 
-    <div class="sc">
-      <div class="sc-icon ic-green">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="4" r="2"/><path d="M1 12c0-2.2 2-4 4.5-4"/><circle cx="10" cy="5" r="2"/><path d="M7 12c0-2.2 1.8-4 4-4"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-green">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5"/><circle cx="12" cy="6" r="2.5"/><path d="M8 13c0-2.76 1.79-5 4-5"/></svg>
       </div>
-      <div class="sc-num cn-green">{{ number_format($stats['total_laki']) }}</div>
-      <div class="sc-lbl">Laki-laki</div>
-      <div class="sc-sub">{{ $stats['rasio_laki'] }}% populasi</div>
+      <div class="stat-num">{{ number_format($stats['total_laki']) }}</div>
+      <div class="stat-label">Laki-laki</div>
+      <div class="stat-sub">{{ $stats['rasio_laki'] }}% populasi</div>
     </div>
 
-    <div class="sc">
-      <div class="sc-icon ic-rose">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="4" r="2.5"/><path d="M3.5 12c.5-2 1.8-3 3.5-3s3 1 3.5 3"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-rose">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M4 13c.5-2.5 2-4 4-4s3.5 1.5 4 4"/></svg>
       </div>
-      <div class="sc-num cn-rose">{{ number_format($stats['total_perempuan']) }}</div>
-      <div class="sc-lbl">Perempuan</div>
-      <div class="sc-sub">{{ $stats['rasio_perempuan'] }}% populasi</div>
+      <div class="stat-num">{{ number_format($stats['total_perempuan']) }}</div>
+      <div class="stat-label">Perempuan</div>
+      <div class="stat-sub">{{ $stats['rasio_perempuan'] }}% populasi</div>
     </div>
 
-    <div class="sc">
-      <div class="sc-icon ic-amber">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="12" height="8" rx="1.5"/><path d="M4 4V3a3 3 0 0 1 6 0v1"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-amber">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="14" height="9" rx="1.5"/><path d="M5 5V4a3 3 0 0 1 6 0v1"/></svg>
       </div>
-      <div class="sc-num cn-amber">{{ number_format($stats['total_kk']) }}</div>
-      <div class="sc-lbl">Total KK</div>
-      <div class="sc-sub">kartu keluarga</div>
+      <div class="stat-num">{{ number_format($stats['total_kk']) }}</div>
+      <div class="stat-label">Kartu Keluarga</div>
+      <div class="stat-sub">KK terdaftar</div>
     </div>
 
-    <div class="sc">
-      <div class="sc-icon ic-teal">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9l-3.5 2.4 1.3-4L1.5 5h4z"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-teal">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
       </div>
-      <div class="sc-num cn-teal">{{ number_format($stats['pemilih_potensial']) }}</div>
-      <div class="sc-lbl">Pemilih Potensial</div>
-      <div class="sc-sub">usia ≥ 17 tahun</div>
+      <div class="stat-num">{{ number_format($stats['pemilih_potensial']) }}</div>
+      <div class="stat-label">Pemilih Potensial</div>
+      <div class="stat-sub">usia ≥ 17 tahun</div>
     </div>
 
   </div>
 
-  <!-- Row 2: KK, Nikah, RT, RW -->
-  <div class="sg" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
-    <div class="sc">
-      <div class="sc-icon ic-cyan">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M5 5h4M5 8h4"/></svg>
+  <!-- STAT ROW 2 -->
+  <div class="stat-grid-2">
+    <div class="stat-card">
+      <div class="stat-icon ic-purple">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><rect x="2" y="1" width="12" height="14" rx="1.5"/><path d="M5 6h6M5 9h4"/></svg>
       </div>
-      <div class="sc-num cn-cyan">{{ number_format($stats['total_nikah']) }}</div>
-      <div class="sc-lbl">Pernikahan</div>
-      <div class="sc-sub">data tercatat</div>
+      <div class="stat-num">{{ number_format($stats['total_nikah']) }}</div>
+      <div class="stat-label">Pernikahan</div>
     </div>
-    <div class="sc">
-      <div class="sc-icon ic-purple">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1L2 4v8h10V4z"/><path d="M5 12V8h4v4"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-blue">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M8 1L1 5v10h14V5z"/><path d="M5 15V9h6v6"/></svg>
       </div>
-      <div class="sc-num cn-purple">{{ number_format($stats['total_rt']) }}</div>
-      <div class="sc-lbl">Total RT</div>
-      <div class="sc-sub">rukun tetangga</div>
+      <div class="stat-num">{{ number_format($stats['total_rt']) }}</div>
+      <div class="stat-label">Rukun Tetangga</div>
     </div>
-    <div class="sc">
-      <div class="sc-icon ic-blue">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 2"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-green">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l3 2"/></svg>
       </div>
-      <div class="sc-num cn-blue">{{ number_format($stats['total_rw']) }}</div>
-      <div class="sc-lbl">Total RW</div>
-      <div class="sc-sub">rukun warga</div>
+      <div class="stat-num">{{ number_format($stats['total_rw']) }}</div>
+      <div class="stat-label">Rukun Warga</div>
     </div>
-    <div class="sc" style="border: 1px solid rgba(59,130,246,0.25); background: rgba(37,99,235,0.06);">
-      <div class="sc-icon ic-green">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9l-3.5 2.4 1.3-4L1.5 5h4z"/></svg>
+    <div class="stat-card">
+      <div class="stat-icon ic-amber">
+        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 4.2L14 7l-3 3 .7 4.2L8 12l-3.7 2.2.7-4.2-3-3 4.2-.8z"/></svg>
       </div>
       @php $avg = $stats['total_rt'] > 0 ? round($stats['total_penduduk']/$stats['total_rt']) : 0; @endphp
-      <div class="sc-num cn-green">{{ $avg }}</div>
-      <div class="sc-lbl">Rata-rata / RT</div>
-      <div class="sc-sub">jiwa per RT</div>
+      <div class="stat-num">{{ $avg }}</div>
+      <div class="stat-label">Rata-rata / RT</div>
     </div>
   </div>
 
-  <!-- ===== DISTRIBUSI USIA ===== -->
-  <div class="sec-label">DISTRIBUSI USIA</div>
-  <div class="card" style="margin-bottom:12px;" id="usia-card">
-    <div class="card-title">
-      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="10" height="7" rx="1"/><path d="M4 3V2M8 3V2"/></svg>
-      KELOMPOK USIA PENDUDUK
-    </div>
-    @php
-      $totalUsia = array_sum($usia);
-      $usiaConfig = [
-        'balita' => ['label'=>'BALITA','sub'=>'0–4 thn','color'=>'linear-gradient(90deg,#3b0764,#a78bfa)','hex'=>'#a78bfa'],
-        'anak'   => ['label'=>'ANAK','sub'=>'5–14 thn','color'=>'linear-gradient(90deg,#164e63,#22d3ee)','hex'=>'#22d3ee'],
-        'remaja' => ['label'=>'REMAJA','sub'=>'15–24 thn','color'=>'linear-gradient(90deg,#14532d,#22c55e)','hex'=>'#22c55e'],
-        'dewasa' => ['label'=>'DEWASA','sub'=>'25–59 thn','color'=>'linear-gradient(90deg,#1e3a8a,#3b82f6)','hex'=>'#3b82f6'],
-        'lansia' => ['label'=>'LANSIA','sub'=>'≥60 thn','color'=>'linear-gradient(90deg,#78350f,#fbbf24)','hex'=>'#fbbf24'],
-      ];
-    @endphp
-    <div class="usia-grid">
-      @foreach($usiaConfig as $key => $cfg)
-        @php $pct = $totalUsia > 0 ? round($usia[$key]/$totalUsia*100,1) : 0; @endphp
-        <div class="usia-row">
-          <span class="usia-lbl">{{ $cfg['label'] }}</span>
-          <div class="usia-bar-wrap">
-            <div class="usia-bar" style="width:{{ $pct }}%;background:{{ $cfg['color'] }};" data-target="{{ $pct }}"></div>
-          </div>
-          <span class="usia-num">{{ number_format($usia[$key]) }}</span>
-          <span class="usia-pct">{{ $pct }}%</span>
+  <!-- USIA + GENDER -->
+  <div class="divider"><span class="divider-label">Demografi</span><div class="divider-line"></div></div>
+  <div class="two-col mb-12">
+
+    <!-- DISTRIBUSI USIA -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon ic-blue">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="13" height="9" rx="1.5"/><path d="M4 4V3a4 4 0 0 1 7 0v1"/></svg>
         </div>
-      @endforeach
+        <span class="card-title">Distribusi Usia</span>
+      </div>
+      @php
+        $totalUsia = array_sum($usia);
+        $usiaMap = [
+          'balita' => ['Balita','0–4 thn','#3b82f6'],
+          'anak'   => ['Anak','5–14 thn','#14b8a6'],
+          'remaja' => ['Remaja','15–24 thn','#22c55e'],
+          'dewasa' => ['Dewasa','25–59 thn','#a855f7'],
+          'lansia' => ['Lansia','≥60 thn','#f59e0b'],
+        ];
+      @endphp
+      <div class="usia-list">
+        @foreach($usiaMap as $key => [$lbl, $sub, $color])
+          @php $pct = $totalUsia > 0 ? round($usia[$key]/$totalUsia*100,1) : 0; @endphp
+          <div class="usia-row">
+            <span class="usia-label" title="{{ $sub }}">{{ $lbl }}</span>
+            <div class="usia-track">
+              <div class="usia-fill" style="width:0%;background:{{ $color }};" data-target="{{ $pct }}"></div>
+            </div>
+            <span class="usia-val">{{ number_format($usia[$key]) }}</span>
+            <span class="usia-pct">{{ $pct }}%</span>
+          </div>
+        @endforeach
+      </div>
     </div>
-  </div>
-
-  <!-- ===== CHARTS ROW 1: Gender + Status Kawin ===== -->
-  <div class="sec-label">DEMOGRAFI</div>
-  <div class="cg">
 
     <!-- DONUT GENDER -->
     <div class="card">
-      <div class="card-title">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 1v5l3 3"/></svg>
-        RASIO GENDER
+      <div class="card-header">
+        <div class="card-icon ic-rose">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 1.5v6l3.5 3.5"/></svg>
+        </div>
+        <span class="card-title">Rasio Gender</span>
       </div>
       <div class="donut-wrap">
-        <div class="donut-canvas-wrap">
-          <canvas id="genderChart" width="120" height="120"></canvas>
+        <div class="donut-canvas">
+          <canvas id="genderChart" width="110" height="110"></canvas>
           <div class="donut-center">
             <span class="donut-center-num">{{ number_format($stats['total_penduduk']) }}</span>
-            <span class="donut-center-lbl">TOTAL</span>
+            <span class="donut-center-lbl">Total</span>
           </div>
         </div>
-        <div class="donut-legend">
-          <div class="dl-row">
-            <div class="dl-dot" style="background:#3b82f6;"></div>
-            <span class="dl-name">Laki-laki</span>
-            <span class="dl-val">{{ number_format($gender['laki']) }}</span>
-            <span class="dl-pct">{{ $stats['rasio_laki'] }}%</span>
+        <div class="legend">
+          <div class="legend-row">
+            <div class="legend-dot" style="background:#3b82f6;"></div>
+            <span class="legend-name">Laki-laki</span>
+            <span class="legend-val">{{ number_format($gender['laki']) }}</span>
+            <span class="legend-pct">{{ $stats['rasio_laki'] }}%</span>
           </div>
-          <div class="dl-row">
-            <div class="dl-dot" style="background:#fb7185;"></div>
-            <span class="dl-name">Perempuan</span>
-            <span class="dl-val">{{ number_format($gender['perempuan']) }}</span>
-            <span class="dl-pct">{{ $stats['rasio_perempuan'] }}%</span>
+          <div class="legend-row">
+            <div class="legend-dot" style="background:#f43f5e;"></div>
+            <span class="legend-name">Perempuan</span>
+            <span class="legend-val">{{ number_format($gender['perempuan']) }}</span>
+            <span class="legend-pct">{{ $stats['rasio_perempuan'] }}%</span>
           </div>
-          <div class="dl-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
-            <div class="dl-dot" style="background:#2dd4bf;"></div>
-            <span class="dl-name">Pemilih</span>
-            <span class="dl-val">{{ number_format($stats['pemilih_potensial']) }}</span>
-            <span class="dl-pct">{{ $stats['total_penduduk'] > 0 ? round($stats['pemilih_potensial']/$stats['total_penduduk']*100,1) : 0 }}%</span>
+          <div class="legend-divider"></div>
+          <div class="legend-row">
+            <div class="legend-dot" style="background:#14b8a6;"></div>
+            <span class="legend-name">Pemilih</span>
+            <span class="legend-val">{{ number_format($stats['pemilih_potensial']) }}</span>
+            <span class="legend-pct">{{ $stats['total_penduduk'] > 0 ? round($stats['pemilih_potensial']/$stats['total_penduduk']*100,1) : 0 }}%</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- STATUS KAWIN -->
-    <div class="card">
-      <div class="card-title">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1l1.2 3.6h3.8L8 6.9l1.2 3.6L6 8.2 2.8 10.5 4 6.9 1 4.6h3.8z"/></svg>
-        STATUS PERNIKAHAN
-      </div>
-      @php $totalKawin = $status_kawin->sum('total'); @endphp
-      @foreach($status_kawin as $i => $s)
-        @php
-          $pct = $totalKawin > 0 ? round($s->total/$totalKawin*100,1) : 0;
-          $colors = ['fb','fg','fa','fp','fc'];
-          $col = $colors[$i % count($colors)];
-        @endphp
-        <div class="bi">
-          <div class="bm">
-            <span class="bn">{{ $s->marital_status ?? 'Tidak Diketahui' }}</span>
-            <span class="bv">{{ number_format($s->total) }} · {{ $pct }}%</span>
-          </div>
-          <div class="bt"><div class="bf {{ $col }}" style="width:0%" data-target="{{ $pct }}%"></div></div>
-        </div>
-      @endforeach
-    </div>
+  </div>
+
+  <!-- AGAMA + PENDIDIKAN + PEKERJAAN -->
+  <div class="three-col mb-12">
 
     <!-- AGAMA -->
     <div class="card">
-      <div class="card-title">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v6M3 6h6"/></svg>
-        AGAMA
+      <div class="card-header">
+        <div class="card-icon ic-purple">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 3v4.5l3 3"/></svg>
+        </div>
+        <span class="card-title">Agama</span>
       </div>
       @php $totalAgama = $agama->sum('total'); @endphp
-      @foreach($agama as $i => $a)
-        @php
-          $pct = $totalAgama > 0 ? round($a->total/$totalAgama*100,1) : 0;
-          $colors = ['fb','fc','fg','fa','fp','ft2'];
-          $col = $colors[$i % count($colors)];
-        @endphp
-        <div class="bi">
-          <div class="bm">
-            <span class="bn">{{ $a->religion ?? 'Lainnya' }}</span>
-            <span class="bv">{{ number_format($a->total) }} · {{ $pct }}%</span>
+      <div class="bar-list">
+        @php $barColors=['#3b82f6','#14b8a6','#22c55e','#f59e0b','#a855f7','#f43f5e']; @endphp
+        @foreach($agama as $i => $a)
+          @php $pct = $totalAgama > 0 ? round($a->total/$totalAgama*100,1) : 0; $c=$barColors[$i%count($barColors)]; @endphp
+          <div class="bar-row">
+            <div class="bar-top">
+              <span class="bar-name">{{ $a->religion ?? 'Lainnya' }}</span>
+              <span class="bar-meta">{{ number_format($a->total) }} · {{ $pct }}%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:0%;background:{{ $c }};" data-target="{{ $pct }}%"></div></div>
           </div>
-          <div class="bt"><div class="bf {{ $col }}" style="width:0%" data-target="{{ $pct }}%"></div></div>
-        </div>
-      @endforeach
+        @endforeach
+      </div>
     </div>
 
-  </div>
-
-  <!-- ===== CHARTS ROW 2: Pendidikan + Pekerjaan ===== -->
-  <div class="cg">
-
+    <!-- PENDIDIKAN -->
     <div class="card">
-      <div class="card-title">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1L1 4l5 3 5-3z"/><path d="M1 4v4M11 4v4"/><path d="M3 5.5v2.7a4 4 0 0 0 6 0V5.5"/></svg>
-        TINGKAT PENDIDIKAN
+      <div class="card-header">
+        <div class="card-icon ic-teal">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><path d="M7.5 1L1 4.5l6.5 3.5 6.5-3.5z"/><path d="M1 4.5v5M14 4.5v5"/><path d="M3 6v3.5a5 5 0 0 0 9 0V6"/></svg>
+        </div>
+        <span class="card-title">Pendidikan</span>
       </div>
       @php $totalPdd = $pendidikan->sum('total'); @endphp
-      @foreach($pendidikan as $i => $p)
-        @php
-          $pct = $totalPdd > 0 ? round($p->total/$totalPdd*100,1) : 0;
-          $colors = ['fb','fc','fg','fa','fp','ft2'];
-          $col = $colors[$i % count($colors)];
-        @endphp
-        <div class="bi">
-          <div class="bm">
-            <span class="bn">{{ $p->education ?? 'Tidak Diketahui' }}</span>
-            <span class="bv">{{ number_format($p->total) }} · {{ $pct }}%</span>
+      <div class="bar-list">
+        @foreach($pendidikan as $i => $p)
+          @php $pct = $totalPdd > 0 ? round($p->total/$totalPdd*100,1) : 0; $c=$barColors[$i%count($barColors)]; @endphp
+          <div class="bar-row">
+            <div class="bar-top">
+              <span class="bar-name">{{ $p->education ?? 'Lainnya' }}</span>
+              <span class="bar-meta">{{ number_format($p->total) }} · {{ $pct }}%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:0%;background:{{ $c }};" data-target="{{ $pct }}%"></div></div>
           </div>
-          <div class="bt"><div class="bf {{ $col }}" style="width:0%" data-target="{{ $pct }}%"></div></div>
-        </div>
-      @endforeach
+        @endforeach
+      </div>
     </div>
 
+    <!-- PEKERJAAN -->
     <div class="card">
-      <div class="card-title">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="10" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg>
-        PEKERJAAN (TOP 8)
+      <div class="card-header">
+        <div class="card-icon ic-amber">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="13" height="9" rx="1.5"/><path d="M5 4V3h5v1"/></svg>
+        </div>
+        <span class="card-title">Pekerjaan (Top 8)</span>
       </div>
       @php $totalPkj = $pekerjaan->sum('total'); @endphp
-      @foreach($pekerjaan as $i => $p)
-        @php
-          $pct = $totalPkj > 0 ? round($p->total/$totalPkj*100,1) : 0;
-          $colors = ['fb','fc','fg','fa','fp','ft2','fb','fc'];
-          $col = $colors[$i % count($colors)];
-        @endphp
-        <div class="bi">
-          <div class="bm">
-            <span class="bn">{{ $p->occupation ?? 'Lainnya' }}</span>
-            <span class="bv">{{ number_format($p->total) }} · {{ $pct }}%</span>
+      <div class="bar-list">
+        @foreach($pekerjaan as $i => $p)
+          @php $pct = $totalPkj > 0 ? round($p->total/$totalPkj*100,1) : 0; $c=$barColors[$i%count($barColors)]; @endphp
+          <div class="bar-row">
+            <div class="bar-top">
+              <span class="bar-name">{{ $p->occupation ?? 'Lainnya' }}</span>
+              <span class="bar-meta">{{ number_format($p->total) }} · {{ $pct }}%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:0%;background:{{ $c }};" data-target="{{ $pct }}%"></div></div>
           </div>
-          <div class="bt"><div class="bf {{ $col }}" style="width:0%" data-target="{{ $pct }}%"></div></div>
-        </div>
-      @endforeach
-    </div>
-
-  </div>
-
-  <!-- ===== PERSEBARAN PER RT ===== -->
-  <div class="sec-label" style="margin-top:12px;">PERSEBARAN PER RT</div>
-  <div class="card" style="margin-bottom:12px;" id="rt-card">
-    <div class="card-title">
-      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1L1 4v7h10V4z"/><path d="M4 11V7h4v4"/></svg>
-      JUMLAH WARGA PER RUKUN TETANGGA
-    </div>
-    @php $maxWarga = $per_rt->max('total_warga') ?: 1; @endphp
-    <div class="rt-grid">
-      @forelse($per_rt as $rt)
-        @php $pct = round($rt['total_warga'] / $maxWarga * 100); @endphp
-        <div class="rt-card">
-          <div class="rt-card-label">{{ $rt['label'] }}</div>
-          <div class="rt-nums">
-            <span class="rt-big">{{ number_format($rt['total_warga']) }}</span>
-            <span class="rt-unit">jiwa</span>
-          </div>
-          <div class="rt-kk">{{ number_format($rt['total_kk']) }} KK</div>
-          <div class="rt-bar-wrap">
-            <div class="rt-bar" style="width:{{ $pct }}%"></div>
-          </div>
-        </div>
-      @empty
-        <div style="color:var(--muted);font-family:'Fira Code',monospace;font-size:.7rem;">Belum ada data RT</div>
-      @endforelse
-    </div>
-  </div>
-
-  <!-- ===== TABEL PENDUDUK TERBARU ===== -->
-  <div class="sec-label" style="margin-top:12px;">PENDUDUK TERBARU</div>
-  <div class="card" id="tbl-card">
-    <div class="tbl-head">
-      <div class="card-title" style="margin-bottom:0;">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="10" height="10" rx="1.5"/><path d="M3 4h6M3 7h4"/></svg>
-        10 DATA TERBARU
+        @endforeach
       </div>
-      <div class="search-wrap">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="3.5"/><path d="M8 8l2.5 2.5"/></svg>
+    </div>
+
+  </div>
+
+  <!-- STATUS KAWIN -->
+  <div class="two-col mb-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon ic-rose">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><path d="M7.5 1l1.8 4 4.2.5-3 3 .7 4.3-3.7-2-3.7 2 .7-4.3-3-3 4.2-.5z"/></svg>
+        </div>
+        <span class="card-title">Status Pernikahan</span>
+      </div>
+      @php $totalKawin = $status_kawin->sum('total'); @endphp
+      <div class="bar-list">
+        @foreach($status_kawin as $i => $s)
+          @php $pct = $totalKawin > 0 ? round($s->total/$totalKawin*100,1) : 0; $c=$barColors[$i%count($barColors)]; @endphp
+          <div class="bar-row">
+            <div class="bar-top">
+              <span class="bar-name">{{ $s->marital_status ?? 'Tidak Diketahui' }}</span>
+              <span class="bar-meta">{{ number_format($s->total) }} · {{ $pct }}%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:0%;background:{{ $c }};" data-target="{{ $pct }}%"></div></div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+    <!-- placeholder right col kalau mau tambah chart lain -->
+    <div></div>
+  </div>
+
+  <!-- PERSEBARAN RT -->
+  <div class="divider"><span class="divider-label">Persebaran RT</span><div class="divider-line"></div></div>
+  @php $maxWarga = $per_rt->max('total_warga') ?: 1; @endphp
+  <div class="rt-grid mb-24">
+    @forelse($per_rt as $rt)
+      @php $pct = round($rt['total_warga']/$maxWarga*100); @endphp
+      <div class="rt-card">
+        <div class="rt-label">{{ $rt['label'] }}</div>
+        <div class="rt-num">{{ number_format($rt['total_warga']) }} <span class="rt-unit">jiwa</span></div>
+        <div class="rt-kk">{{ number_format($rt['total_kk']) }} KK</div>
+        <div class="rt-track"><div class="rt-fill" style="width:{{ $pct }}%;"></div></div>
+      </div>
+    @empty
+      <p style="color:var(--gray-400);font-size:.85rem;">Belum ada data RT.</p>
+    @endforelse
+  </div>
+
+  <!-- TABEL WARGA -->
+  <div class="divider"><span class="divider-label">Warga Terbaru</span><div class="divider-line"></div></div>
+  <div class="card">
+    <div class="tbl-top">
+      <span class="tbl-title">10 Data Terbaru</span>
+      <div class="search-box">
+        <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M10 10l3 3"/></svg>
         <input type="text" id="tbl-search" placeholder="Cari nama...">
       </div>
     </div>
-    <div class="tw">
-      <table id="tbl-main">
+    <div class="tbl-wrap">
+      <table>
         <thead>
           <tr>
             <th>#</th>
@@ -652,28 +662,28 @@ tr:hover td { background: rgba(37,99,235,0.04); }
             <th>Usia</th>
             <th>Agama</th>
             <th>Pekerjaan</th>
-            <th>Status Nikah</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody id="tbl-body">
           @foreach($penduduk_terbaru as $i => $p)
           <tr>
-            <td class="tnum">{{ str_pad($i+1, 2, '0', STR_PAD_LEFT) }}</td>
-            <td class="tname">{{ $p->full_name }}</td>
+            <td class="td-muted">{{ str_pad($i+1,2,'0',STR_PAD_LEFT) }}</td>
+            <td class="td-name">{{ $p->full_name }}</td>
             <td>
-              <span class="badge {{ $p->gender === 'Laki-laki' ? 'bL' : 'bP' }}">
+              <span class="badge {{ $p->gender === 'Laki-laki' ? 'badge-m' : 'badge-f' }}">
                 {{ $p->gender === 'Laki-laki' ? 'L' : 'P' }}
               </span>
             </td>
-            <td class="tage">{{ $p->birth_date ? $p->birth_date->age : '—' }} thn</td>
+            <td class="td-age">{{ $p->birth_date ? $p->birth_date->age : '—' }}th</td>
             <td>{{ $p->religion ?? '—' }}</td>
             <td>{{ $p->occupation ?? '—' }}</td>
-            <td class="tnum">{{ $p->marital_status ?? '—' }}</td>
+            <td class="td-muted">{{ $p->marital_status ?? '—' }}</td>
           </tr>
           @endforeach
         </tbody>
       </table>
-      <div id="no-result" class="no-result" style="display:none;">Tidak ada hasil ditemukan</div>
+      <div id="no-result" class="no-result" style="display:none;">Tidak ada data ditemukan.</div>
     </div>
     <div class="pager">
       <span class="pager-info" id="pager-info"></span>
@@ -681,136 +691,103 @@ tr:hover td { background: rgba(37,99,235,0.04); }
     </div>
   </div>
 
-</div><!-- /wrap -->
+</main>
 
 <!-- FOOTER -->
-<footer class="footer">
-  <span class="ft">SISTEM INFORMASI KEPENDUDUKAN — DATA PUBLIK</span>
-  <a href="/admin" class="fa-link ft">LOGIN_ADMIN</a>
+<footer>
+  <div class="footer">
+    <span class="footer-text">Sistem Informasi Kependudukan · Data Publik</span>
+    <a href="/admin" class="footer-link">Masuk Admin →</a>
+  </div>
 </footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── GSAP ENTRANCE ──
-  gsap.from('#sg .sc', { opacity:0, y:18, scale:.96, duration:.38, stagger:{each:.055,from:'start'}, ease:'back.out(1.3)', delay:.15 });
-  gsap.from('#usia-card .usia-row', { opacity:0, x:-10, duration:.3, stagger:.06, ease:'power2.out', delay:.4 });
-  gsap.from('#rt-card .rt-card', { opacity:0, y:10, scale:.97, duration:.3, stagger:.05, ease:'back.out(1.2)', delay:.5 });
-  gsap.from('#tbl-card tbody tr', { opacity:0, x:-6, duration:.26, stagger:.04, ease:'power1.out', delay:.65 });
+  // ── PROGRESS BARS ──
+  const animateBars = (selector, delay = 400) => {
+    document.querySelectorAll(selector).forEach((el, i) => {
+      const target = el.dataset.target;
+      setTimeout(() => {
+        el.style.transition = 'width .8s cubic-bezier(.4,0,.2,1)';
+        el.style.width = typeof target === 'string' && target.endsWith('%') ? target : target + '%';
+      }, delay + i * 60);
+    });
+  };
+  animateBars('.usia-fill', 300);
+  animateBars('.bar-fill', 500);
 
-  // ── USIA PROGRESS BARS ──
-  document.querySelectorAll('.usia-bar').forEach(bar => {
-    const target = bar.dataset.target;
-    bar.style.width = '0%';
-    setTimeout(() => {
-      bar.style.transition = 'width 1s cubic-bezier(.4,0,.2,1)';
-      bar.style.width = target + '%';
-    }, 500);
-  });
-
-  // ── REGULAR PROGRESS BARS ──
-  document.querySelectorAll('.bf').forEach(bar => {
-    const w = bar.dataset.target || bar.style.width;
-    bar.style.width = '0%';
-    setTimeout(() => {
-      bar.style.transition = 'width .9s cubic-bezier(.4,0,.2,1)';
-      bar.style.width = w;
-    }, 700);
-  });
-
-  // ── CHART.JS DONUT GENDER ──
+  // ── DONUT CHART ──
   const ctx = document.getElementById('genderChart').getContext('2d');
   new Chart(ctx, {
     type: 'doughnut',
     data: {
       datasets: [{
         data: [{{ $gender['laki'] }}, {{ $gender['perempuan'] }}],
-        backgroundColor: ['#2563eb','#be123c'],
-        hoverBackgroundColor: ['#3b82f6','#fb7185'],
-        borderColor: '#0c1220',
+        backgroundColor: ['#3b82f6', '#f43f5e'],
+        hoverBackgroundColor: ['#2563eb', '#e11d48'],
+        borderColor: '#ffffff',
         borderWidth: 3,
-        hoverOffset: 4,
+        hoverOffset: 3,
       }]
     },
     options: {
-      cutout: '72%',
+      cutout: '74%',
       responsive: false,
-      plugins: { legend: { display: false }, tooltip: {
-        callbacks: {
-          label: (ctx) => ` ${ctx.formattedValue} jiwa`
-        }
-      }},
-      animation: { animateRotate: true, duration: 900 }
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => ` ${c.formattedValue} jiwa` } }
+      },
+      animation: { duration: 900 }
     }
   });
 
   // ── TABLE SEARCH + PAGINATION ──
-  const ROWS_PER_PAGE = 5;
+  const PER_PAGE = 5;
   const tbody = document.getElementById('tbl-body');
   const allRows = Array.from(tbody.querySelectorAll('tr'));
   const noResult = document.getElementById('no-result');
   const pagerInfo = document.getElementById('pager-info');
   const pagerBtns = document.getElementById('pager-btns');
-  const searchInput = document.getElementById('tbl-search');
+  const search = document.getElementById('tbl-search');
+  let page = 1, rows = [...allRows];
 
-  let currentPage = 1;
-  let filteredRows = [...allRows];
-
-  function renderTable() {
-    const total = filteredRows.length;
-    const pages = Math.max(1, Math.ceil(total / ROWS_PER_PAGE));
-    currentPage = Math.min(currentPage, pages);
-    const start = (currentPage - 1) * ROWS_PER_PAGE;
-    const end = start + ROWS_PER_PAGE;
-
+  function render() {
+    const total = rows.length;
+    const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+    page = Math.min(page, pages);
+    const s = (page-1)*PER_PAGE, e = s+PER_PAGE;
     allRows.forEach(r => r.style.display = 'none');
-    filteredRows.slice(start, end).forEach(r => r.style.display = '');
-
-    noResult.style.display = total === 0 ? 'block' : 'none';
-
-    // pager info
-    if (total > 0) {
-      pagerInfo.textContent = `SHOWING ${start+1}–${Math.min(end,total)} OF ${total}`;
-    } else {
-      pagerInfo.textContent = '';
-    }
-
-    // pager buttons
+    rows.slice(s, e).forEach(r => r.style.display = '');
+    noResult.style.display = total === 0 ? '' : 'none';
+    pagerInfo.textContent = total > 0 ? `${s+1}–${Math.min(e,total)} dari ${total}` : '';
     pagerBtns.innerHTML = '';
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'pg-btn';
-    prevBtn.textContent = '← PREV';
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => { currentPage--; renderTable(); };
-    pagerBtns.appendChild(prevBtn);
 
-    for (let i = 1; i <= pages; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'pg-btn' + (i === currentPage ? ' active' : '');
-      btn.textContent = i;
-      btn.onclick = () => { currentPage = i; renderTable(); };
-      pagerBtns.appendChild(btn);
+    const prev = document.createElement('button');
+    prev.className = 'pg-btn'; prev.textContent = '←'; prev.disabled = page===1;
+    prev.onclick = () => { page--; render(); };
+    pagerBtns.appendChild(prev);
+
+    for (let i=1; i<=pages; i++) {
+      const b = document.createElement('button');
+      b.className = 'pg-btn' + (i===page?' active':'');
+      b.textContent = i; b.onclick = () => { page=i; render(); };
+      pagerBtns.appendChild(b);
     }
 
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'pg-btn';
-    nextBtn.textContent = 'NEXT →';
-    nextBtn.disabled = currentPage === pages;
-    nextBtn.onclick = () => { currentPage++; renderTable(); };
-    pagerBtns.appendChild(nextBtn);
+    const next = document.createElement('button');
+    next.className = 'pg-btn'; next.textContent = '→'; next.disabled = page===pages;
+    next.onclick = () => { page++; render(); };
+    pagerBtns.appendChild(next);
   }
 
-  searchInput.addEventListener('input', () => {
-    const q = searchInput.value.toLowerCase().trim();
-    filteredRows = q
-      ? allRows.filter(r => r.querySelector('.tname')?.textContent.toLowerCase().includes(q))
-      : [...allRows];
-    currentPage = 1;
-    renderTable();
+  search.addEventListener('input', () => {
+    const q = search.value.toLowerCase().trim();
+    rows = q ? allRows.filter(r => r.querySelector('.td-name')?.textContent.toLowerCase().includes(q)) : [...allRows];
+    page = 1; render();
   });
 
-  renderTable();
-
+  render();
 });
 </script>
 </body>
