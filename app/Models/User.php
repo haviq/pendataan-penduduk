@@ -47,4 +47,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Hanya user dengan role super_admin (atau panel_user dengan
+     * permission) yang boleh akses Filament panel.
+     */
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->hasRole('super_admin') || $this->hasAnyPermission([
+            'view_any_resident',
+            'view_any_household',
+            'view_any_rt',
+            'view_any_rw',
+            'view_any_marriage',
+        ]);
+    }
 }

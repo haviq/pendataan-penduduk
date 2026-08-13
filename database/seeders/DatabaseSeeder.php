@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,8 +22,11 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
+        // ── Pastikan role super_admin ada ──────────────────────────────
+        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+
         // ── Admin default (local/staging saja) ─────────────────────────
-        User::firstOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@sidukuh.local'],
             [
                 'name'     => 'Admin Gondang',
@@ -30,6 +34,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $this->command->info('Seeder selesai — admin@sidukuh.local dibuat.');
+        // ── Assign role super_admin ────────────────────────────────────
+        if (! $admin->hasRole('super_admin')) {
+            $admin->assignRole($role);
+        }
+
+        $this->command->info('Seeder selesai — admin@sidukuh.local (super_admin) dibuat.');
     }
 }
