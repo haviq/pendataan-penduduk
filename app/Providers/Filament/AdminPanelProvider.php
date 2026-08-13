@@ -43,11 +43,42 @@ class AdminPanelProvider extends PanelProvider
 /* ── BASE ── */
 *, *::before, *::after { font-family: "Inter", system-ui, sans-serif !important; }
 
-/* ── SIDEBAR ── */
+/* ── SIDEBAR — light ── */
 .fi-sidebar {
     background: #ffffff !important;
     border-right: 1px solid #e5e7eb !important;
 }
+/* ── SIDEBAR — dark ── */
+.dark .fi-sidebar {
+    background: #111827 !important;
+    border-right: 1px solid #1f2937 !important;
+}
+.dark .fi-sidebar-header {
+    background: #111827 !important;
+    border-bottom: 1px solid #1f2937 !important;
+}
+.dark .fi-brand-name { color: #f9fafb !important; }
+.dark .fi-sidebar-item-button,
+.dark .fi-sidebar-item-button *,
+.dark .fi-sidebar-nav-item a,
+.dark .fi-sidebar-nav-item button,
+.dark .fi-sidebar-item-label {
+    color: #e5e7eb !important;
+}
+.dark .fi-sidebar-item-button:hover,
+.dark .fi-sidebar-nav-item a:hover,
+.dark .fi-sidebar-nav-item button:hover {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+}
+.dark .fi-sidebar-item-button.fi-active,
+.dark .fi-sidebar-item-button[aria-current] {
+    background: rgba(59,130,246,0.15) !important;
+    color: #93c5fd !important;
+}
+.dark .fi-sidebar-item-button.fi-active *,
+.dark .fi-sidebar-item-button[aria-current] * { color: #93c5fd !important; }
+.dark .fi-sidebar-group-label { color: #6b7280 !important; }
 .fi-sidebar-nav { padding: 8px !important; }
 
 /* sidebar item — semua selector Filament v5 */
