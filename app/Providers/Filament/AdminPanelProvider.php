@@ -351,9 +351,60 @@ class AdminPanelProvider extends PanelProvider
     border-radius: 14px !important;
     box-shadow: 0 1px 3px rgba(0,0,0,.08) !important;
 }
+/* semua teks di login page harus gelap */
+.fi-simple-page *,
+.fi-simple-page label,
+.fi-simple-page h1,
+.fi-simple-page h2,
+.fi-simple-page p,
+.fi-simple-page span:not([class*="fi-btn"]),
+.fi-simple-page a {
+    color: #111827 !important;
+}
 .fi-simple-page .fi-logo .fi-brand-name {
     font-size: 1.1rem !important;
     font-weight: 800 !important;
+    color: #111827 !important;
+}
+/* heading & subtitle login */
+.fi-simple-page .fi-heading,
+.fi-simple-page [class*="heading"],
+.fi-simple-page .text-center {
+    color: #111827 !important;
+}
+/* subtext / hint di login */
+.fi-simple-page .fi-fo-field-wrp-helper-text,
+.fi-simple-page [class*="helper"],
+.fi-simple-page [class*="hint"] {
+    color: #6b7280 !important;
+}
+/* input di login */
+.fi-simple-page input,
+.fi-simple-page .fi-input {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border-color: #e5e7eb !important;
+}
+.fi-simple-page input::placeholder {
+    color: #9ca3af !important;
+}
+/* label input */
+.fi-simple-page .fi-fo-field-wrp-label label {
+    color: #374151 !important;
+    font-weight: 600 !important;
+}
+/* tombol login */
+.fi-simple-page .fi-btn-primary {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+}
+.fi-simple-page .fi-btn-primary * {
+    color: #ffffff !important;
+}
+/* link "Lupa password" */
+.fi-simple-page a {
+    color: #2563eb !important;
 }
 
 /* ── PAGINATION ── */
