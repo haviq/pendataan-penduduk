@@ -35,13 +35,17 @@ class KartuKKController extends Controller
         $pdf = Pdf::loadView('kartu_kk.cetak', compact('household'))
             ->setPaper('a5', 'landscape');
 
-        $filename = 'KK_' . $household->no_kk . '.pdf';
+        // Sanitize filename — no_kk hanya boleh alfanumerik & dash
+        $filename = 'KK_' . preg_replace('/[^a-zA-Z0-9_\-]/', '', $household->no_kk) . '.pdf';
         return $pdf->download($filename);
     }
 
     public function cetakBulk(Request $request)
     {
-        $request->validate(['ids' => 'required|array|min:1']);
+        $request->validate([
+            'ids'   => 'required|array|min:1|max:50', // max 50 KK sekaligus
+            'ids.*' => 'integer|exists:households,id',
+        ]);
 
         $households = Household::with(['rt.rw', 'residents' => fn($q) => $q->orderBy('relationship_to_head')])
             ->whereIn('id', $request->ids)

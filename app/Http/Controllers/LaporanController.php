@@ -20,8 +20,15 @@ class LaporanController extends Controller
 
     public function exportPdf(Request $request, string $jenis)
     {
-        $filterRt     = $request->filter_rt;
-        $filterStatus = $request->filter_status ?? 'Aktif';
+        // Whitelist jenis agar tidak bisa dimanipulasi
+        if (!in_array($jenis, ['demografi', 'warga', 'rt_summary'])) {
+            abort(404);
+        }
+
+        $filterRt     = $request->integer('filter_rt') ?: null;
+        $filterStatus = in_array($request->filter_status, ['Aktif', 'Pindah', 'Meninggal', 'semua'])
+            ? $request->filter_status
+            : 'Aktif';
 
         $query = Resident::with('household.rt.rw')
             ->when($filterStatus !== 'semua', fn($q) => $q->where('status', $filterStatus))
@@ -82,8 +89,15 @@ class LaporanController extends Controller
 
     public function exportCsv(Request $request, string $jenis)
     {
-        $filterRt     = $request->filter_rt;
-        $filterStatus = $request->filter_status ?? 'Aktif';
+        // Whitelist jenis
+        if (!in_array($jenis, ['warga', 'rt_summary'])) {
+            abort(404);
+        }
+
+        $filterRt     = $request->integer('filter_rt') ?: null;
+        $filterStatus = in_array($request->filter_status, ['Aktif', 'Pindah', 'Meninggal', 'semua'])
+            ? $request->filter_status
+            : 'Aktif';
 
         $query = Resident::with('household.rt.rw')
             ->when($filterStatus !== 'semua', fn($q) => $q->where('status', $filterStatus))

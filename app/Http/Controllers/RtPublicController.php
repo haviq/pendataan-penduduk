@@ -48,7 +48,9 @@ class RtPublicController extends Controller
         $warga = Resident::whereHas('household', fn($q) => $q->where('rt_id', $id))
             ->where('status', 'Aktif')
             ->orderBy('full_name')
-            ->get(['full_name', 'gender', 'birth_date', 'religion', 'occupation', 'marital_status']);
+            ->paginate(100)
+            ->getCollection()
+            ->values();
 
         return view('rt.show', compact('rt', 'totalWarga', 'totalKK', 'totalLaki', 'totalPerempuan', 'agama', 'usia', 'warga'));
     }
