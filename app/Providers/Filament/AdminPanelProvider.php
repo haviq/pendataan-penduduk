@@ -54,8 +54,8 @@ class AdminPanelProvider extends PanelProvider
 .fi-sidebar-item-button {
     border-radius: 8px !important;
     font-size: .82rem !important;
-    font-weight: 500 !important;
-    color: #4b5563 !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
     transition: background .15s, color .15s !important;
 }
 .fi-sidebar-item-button:hover {
@@ -66,6 +66,17 @@ class AdminPanelProvider extends PanelProvider
 .fi-sidebar-item-button[aria-current] {
     background: #eff6ff !important;
     color: #2563eb !important;
+    font-weight: 700 !important;
+}
+/* icon & label di dalam sidebar item */
+.fi-sidebar-item-button span,
+.fi-sidebar-item-button svg {
+    color: inherit !important;
+}
+/* sub-item / nested nav */
+.fi-sidebar-nav-item .fi-sidebar-item-label,
+.fi-sidebar-group-items .fi-sidebar-item-button {
+    color: #1f2937 !important;
     font-weight: 600 !important;
 }
 
